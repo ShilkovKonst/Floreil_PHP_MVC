@@ -7,7 +7,7 @@ final class Config
     // Identifiants Database
     const
     DB_HOST = 'localhost',
-    DB_NAME = 'floreil-bdd',
+    DB_NAME = 'floreil',
     DB_USR = 'root',
     DB_PWD = '',
 
