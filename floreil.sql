@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mar. 03 jan. 2023 à 15:40
+-- Généré le : mer. 04 jan. 2023 à 16:38
 -- Version du serveur : 5.7.36
 -- Version de PHP : 7.4.26
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `floreil-bdd`
+-- Base de données : `floreil`
 --
 
 -- --------------------------------------------------------
@@ -47,19 +47,18 @@ CREATE TABLE IF NOT EXISTS `ajouter_au_panier` (
 DROP TABLE IF EXISTS `categorie`;
 CREATE TABLE IF NOT EXISTS `categorie` (
   `idCategorie` int(10) NOT NULL AUTO_INCREMENT,
-  `nom_Categorie` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
-  `resistanceFroid_Categorie` tinyint(1) DEFAULT NULL,
-  `resistanceFroidBas_Categorie` int(3) DEFAULT NULL,
-  `resistanceFroidHaut_Categorie` int(3) DEFAULT NULL,
+  `nom_Categorie` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
+  `image_Categorie` varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
   PRIMARY KEY (`idCategorie`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 --
 -- Déchargement des données de la table `categorie`
 --
 
-INSERT INTO `categorie` (`idCategorie`, `nom_Categorie`, `resistanceFroid_Categorie`, `resistanceFroidBas_Categorie`, `resistanceFroidHaut_Categorie`) VALUES
-(1, 'exterieur', 1, -20, -15);
+INSERT INTO `categorie` (`idCategorie`, `nom_Categorie`, `image_Categorie`) VALUES
+(1, 'Interieur', 'section-plantes-interieur.jpeg'),
+(2, 'Exterieur', 'section-plantes-exterieur.jpeg');
 
 -- --------------------------------------------------------
 
@@ -70,9 +69,9 @@ INSERT INTO `categorie` (`idCategorie`, `nom_Categorie`, `resistanceFroid_Catego
 DROP TABLE IF EXISTS `commande`;
 CREATE TABLE IF NOT EXISTS `commande` (
   `idCommande` int(10) NOT NULL AUTO_INCREMENT,
-  `numero_Commande` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
-  `linkAgenceLivraison_Commande` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
-  `numeroExtLivraison_Commande` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+  `numero_Commande` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
+  `linkAgenceLivraison_Commande` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
+  `numeroExtLivraison_Commande` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
   `idUtilisateur` int(10) DEFAULT NULL,
   PRIMARY KEY (`idCommande`),
   KEY `FK_Commande_idUtilisateur` (`idUtilisateur`)
@@ -87,10 +86,10 @@ CREATE TABLE IF NOT EXISTS `commande` (
 DROP TABLE IF EXISTS `facture`;
 CREATE TABLE IF NOT EXISTS `facture` (
   `idFacture` int(10) NOT NULL AUTO_INCREMENT,
-  `numero_Facture` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+  `numero_Facture` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
   `montantPanier_Facture` float DEFAULT NULL,
   `date_Facture` datetime DEFAULT CURRENT_TIMESTAMP,
-  `document_Facture` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+  `document_Facture` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
   `idUtilisateur` int(10) DEFAULT NULL,
   PRIMARY KEY (`idFacture`),
   KEY `FK_Facture_idUtilisateur` (`idUtilisateur`)
@@ -99,40 +98,49 @@ CREATE TABLE IF NOT EXISTS `facture` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `plante`
+-- Structure de la table `plantes`
 --
 
-DROP TABLE IF EXISTS `plante`;
-CREATE TABLE IF NOT EXISTS `plante` (
+DROP TABLE IF EXISTS `plantes`;
+CREATE TABLE IF NOT EXISTS `plantes` (
   `idPlante` int(10) NOT NULL AUTO_INCREMENT,
   `createdDate_Plante` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `title_Plante` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+  `title_Plante` varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
   `description_Plante` text COLLATE latin1_general_ci,
-  `image_Plante` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+  `image_Plante` varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
   `prix_Plante` float DEFAULT NULL,
   `qnty_Plante` int(5) DEFAULT NULL,
-  `nomCommun_Plante` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
-  `genrePlante` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
-  `espece_Plante` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
-  `variete_Plante` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
-  `famille_Plante` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+  `nomCommun_Plante` varchar(255) COLLATE latin1_general_ci DEFAULT NULL,
   `hauteurCM_Plante` int(5) DEFAULT NULL,
-  `feillage_Plante` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+  `feillage_Plante` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
   `arrosage_Plante` text COLLATE latin1_general_ci,
   `floraison_Plante` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
   `floraisonParfumee_Plante` tinyint(1) DEFAULT NULL,
-  `modeVie_Plante` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+  `modeVie_Plante` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
+  `resistanceFroid_Plante` tinyint(1) DEFAULT NULL,
+  `resistanceFroidBas_Plante` int(3) DEFAULT NULL,
+  `resistanceFroidHaut_Plante` int(3) DEFAULT NULL,
   `idCategorie` int(10) DEFAULT NULL,
   PRIMARY KEY (`idPlante`),
   KEY `FK_Plante_idCategorie` (`idCategorie`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+-- --------------------------------------------------------
 
 --
--- Déchargement des données de la table `plante`
+-- Structure de la table `poster_comment`
 --
 
-INSERT INTO `plante` (`idPlante`, `createdDate_Plante`, `title_Plante`, `description_Plante`, `image_Plante`, `prix_Plante`, `qnty_Plante`, `nomCommun_Plante`, `genrePlante`, `espece_Plante`, `variete_Plante`, `famille_Plante`, `hauteurCM_Plante`, `feillage_Plante`, `arrosage_Plante`, `floraison_Plante`, `floraisonParfumee_Plante`, `modeVie_Plante`, `idCategorie`) VALUES
-(1, '2023-01-03 15:36:53', 'Cupressocyparis Leylandii', NULL, 'cupressocyparis-leylandii.jpg', 149, 23, 'Cypres de Leyland dore', 'X Cupressocyparis', 'Leylandii', 'Castlewellan Gold', 'Cupressacees', 150, NULL, NULL, NULL, NULL, NULL, 1);
+DROP TABLE IF EXISTS `poster_comment`;
+CREATE TABLE IF NOT EXISTS `poster_comment` (
+  `idUtilisateur` int(10) NOT NULL AUTO_INCREMENT,
+  `idPlante` int(10) NOT NULL,
+  `title_Comment` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
+  `body_Comment` text COLLATE latin1_general_ci,
+  `date_Comment` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idUtilisateur`,`idPlante`),
+  KEY `FK_poster_comment_idPlante` (`idPlante`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 
 -- --------------------------------------------------------
 
@@ -143,21 +151,28 @@ INSERT INTO `plante` (`idPlante`, `createdDate_Plante`, `title_Plante`, `descrip
 DROP TABLE IF EXISTS `utilisateurs`;
 CREATE TABLE IF NOT EXISTS `utilisateurs` (
   `idUtilisateur` int(10) NOT NULL AUTO_INCREMENT,
-  `nom_Utilisateur` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
-  `prenom_Utilisateur` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
-  `email_Utilisateur` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+  `isAdmin_Utilisateur` tinyint(4) DEFAULT NULL,
+  `nom_Utilisateur` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
+  `prenom_Utilisateur` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
+  `email_Utilisateur` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
   `telMob_Utilisateur` int(20) DEFAULT NULL,
-  `username_Utilisateur` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
-  `password_Utilisateur` varchar(15) COLLATE latin1_general_ci NOT NULL COMMENT 'encryption sha1',
-  `role_Utilisateur` tinyint(1) NOT NULL COMMENT 'user, admin etc',
-  `datePanier_Utilisateur` datetime DEFAULT CURRENT_TIMESTAMP,
+  `username_Utilisateur` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
+  `password_Utilisateur` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
+  `datePanier_Utilisateur` datetime DEFAULT NULL,
   `batimentAdresse_Utilisateur` int(5) DEFAULT NULL,
-  `rueAdresse_Utilisateur` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
-  `codePostaleAdresse_Utilisateur` int(6) DEFAULT NULL,
-  `villeAdresse_Utilisateur` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
-  `paysAdresse_Utilisateur` varchar(45) COLLATE latin1_general_ci DEFAULT NULL,
+  `rueAdresse_Utilisateur` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
+  `codePostaleAdresse_Utilisateur` int(10) DEFAULT NULL,
+  `villeAdresse_Utilisateur` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
+  `paysAdresse_Utilisateur` varchar(100) COLLATE latin1_general_ci DEFAULT NULL,
   PRIMARY KEY (`idUtilisateur`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+--
+-- Déchargement des données de la table `utilisateurs`
+--
+
+INSERT INTO `utilisateurs` (`idUtilisateur`, `isAdmin_Utilisateur`, `nom_Utilisateur`, `prenom_Utilisateur`, `email_Utilisateur`, `telMob_Utilisateur`, `username_Utilisateur`, `password_Utilisateur`, `datePanier_Utilisateur`, `batimentAdresse_Utilisateur`, `rueAdresse_Utilisateur`, `codePostaleAdresse_Utilisateur`, `villeAdresse_Utilisateur`, `paysAdresse_Utilisateur`) VALUES
+(1, NULL, 'Admin', 'Admin', 'admin@admin.admin', 123456789, 'Admin', '4e7afebcfbae000b22c7c85e5560f89a2a0280b4', NULL, 123, 'Admin', 123456, 'Admin', 'Admin');
 
 --
 -- Contraintes pour les tables déchargées
@@ -167,7 +182,7 @@ CREATE TABLE IF NOT EXISTS `utilisateurs` (
 -- Contraintes pour la table `ajouter_au_panier`
 --
 ALTER TABLE `ajouter_au_panier`
-  ADD CONSTRAINT `FK_ajouter_au_panier_idPlante` FOREIGN KEY (`idPlante`) REFERENCES `plante` (`idPlante`),
+  ADD CONSTRAINT `FK_ajouter_au_panier_idPlante` FOREIGN KEY (`idPlante`) REFERENCES `plantes` (`idPlante`),
   ADD CONSTRAINT `FK_ajouter_au_panier_idUtilisateur` FOREIGN KEY (`idUtilisateur`) REFERENCES `utilisateurs` (`idUtilisateur`);
 
 --
@@ -183,10 +198,17 @@ ALTER TABLE `facture`
   ADD CONSTRAINT `FK_Facture_idUtilisateur` FOREIGN KEY (`idUtilisateur`) REFERENCES `utilisateurs` (`idUtilisateur`);
 
 --
--- Contraintes pour la table `plante`
+-- Contraintes pour la table `plantes`
 --
-ALTER TABLE `plante`
+ALTER TABLE `plantes`
   ADD CONSTRAINT `FK_Plante_idCategorie` FOREIGN KEY (`idCategorie`) REFERENCES `categorie` (`idCategorie`);
+
+--
+-- Contraintes pour la table `poster_comment`
+--
+ALTER TABLE `poster_comment`
+  ADD CONSTRAINT `FK_poster_comment_idPlante` FOREIGN KEY (`idPlante`) REFERENCES `plantes` (`idPlante`),
+  ADD CONSTRAINT `FK_poster_comment_idUtilisateur` FOREIGN KEY (`idUtilisateur`) REFERENCES `utilisateurs` (`idUtilisateur`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

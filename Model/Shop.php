@@ -12,10 +12,9 @@ class Shop
   }
 
   /////////////////////////////////_______READ_______//////////////////////////////////////////////////////////////////
-  public function getCategorieByName($nameCat)
+  public function getCategorie()
   {
-    $oStmt = $this->oDb->prepare('SELECT * FROM Categorie WHERE nom_Categorie  = :nameCat LIMIT 1');
-    $oStmt->bindParam(':nameCat', $nameCat, \PDO::PARAM_INT);
+    $oStmt = $this->oDb->prepare('SELECT * FROM Categorie ORDER BY idCategorie DESC');
     $oStmt->execute();
     return $oStmt->fetch(\PDO::FETCH_OBJ);
   }
@@ -30,10 +29,10 @@ class Shop
     return $oStmt->fetchAll(\PDO::FETCH_OBJ);
   }
   //get specific product
-  public function getPlanteById($iId)
+  public function getPlanteById($iPlanteId)
   {
-    $oStmt = $this->oDb->prepare('SELECT * FROM Plantes WHERE idPlante = :postId LIMIT 1');
-    $oStmt->bindParam(':postId', $iId, \PDO::PARAM_INT);
+    $oStmt = $this->oDb->prepare('SELECT * FROM Plantes WHERE idPlante = :planteId LIMIT 1');
+    $oStmt->bindParam(':planteId', $iPlanteId, \PDO::PARAM_INT);
     $oStmt->execute();
     return $oStmt->fetch(\PDO::FETCH_OBJ);
   }
@@ -41,6 +40,13 @@ class Shop
   public function getAllPlantes()
   {
     $oStmt = $this->oDb->query('SELECT * FROM Plantes ORDER BY createdDate DESC');
+    return $oStmt->fetchAll(\PDO::FETCH_OBJ);
+  }
+
+  public function getPlantesByCategories($iIdCat)
+  {
+    $oStmt = $this->oDb->query('SELECT * FROM Plantes WHERE idCategorie = :idCat ORDER BY createdDate DESC');
+    $oStmt->bindParam(':idCat', $iIdCat, \PDO::PARAM_INT);
     return $oStmt->fetchAll(\PDO::FETCH_OBJ);
   }
 
@@ -79,10 +85,10 @@ class Shop
     return $oStmt->rowCount();
   }
   // this is Patrick's code, don't understand logic 
-  public function getUserId($userId)
+  public function getUserId($username)
   {
     $oStmt = $this->oDb->prepare('SELECT idUtilisateur FROM Utilisateurs WHERE username_Utilisateur = :username');
-    $oStmt->bindParam(':username', $userId, \PDO::PARAM_STR);
+    $oStmt->bindParam(':username', $username, \PDO::PARAM_STR);
     $oStmt->execute();
     return $oStmt->fetch(\PDO::FETCH_OBJ);
   }
@@ -132,7 +138,11 @@ class Shop
     codePostaleAdresse_Utilisateur, villeAdresse_Utilisateur, 
     paysAdresse_Utilisateur) 
     VALUES
-    (:surname, :name, :email, :telMob, :username, :password, :houseAdresse, :streetAdresse, :ZIPAdresse, :cityAdresse, :countryAdresse)');
+    (:surname, :name, 
+    :email, :telMob, 
+    :username, :password, 
+    :houseAdresse, :streetAdresse, 
+    :ZIPAdresse, :cityAdresse, :countryAdresse)');
     return $oStmt->execute($aData);
   }
 

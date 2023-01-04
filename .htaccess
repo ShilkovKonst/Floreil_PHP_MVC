@@ -1,0 +1,12 @@
+ErrorDocument 403 /FloreilMVC/view/error.php
+ErrorDocument 404 /FloreilMVC/view/error.php
+ErrorDocument 405 /FloreilMVC/view/error.php
+ErrorDocument 408 /FloreilMVC/view/error.php
+ErrorDocument 500 /FloreilMVC/view/error.php
+ErrorDocument 502 /FloreilMVC/view/error.php
+ErrorDocument 504 /FloreilMVC/view/error.php
+
+RewriteEngine On
+RewriteRule ^([^_]*)_([^_]*)\.html$ /FloreilMVC/?p=$1&a=$2 [L]
+RewriteRule ^([^_]*)_([^_]*)_([^_]*)\.html$ /FloreilMVC/?p=$1&a=$2&id=$3 [L]
+RewriteRule ^([^_]*)_([^_]*)_([^_]*)_([^_]*)_([^_]*)\.html$ /FloreilMVC/?p=$1&a=$2&postid=$3&commentId=$4&vote=$5 [L]
