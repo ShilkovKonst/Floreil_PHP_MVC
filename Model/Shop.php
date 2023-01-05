@@ -12,43 +12,47 @@ class Shop
   }
 
   /////////////////////////////////_______READ_______//////////////////////////////////////////////////////////////////
-  public function getCategorie()
+  public function getCategories()
   {
-    $oStmt = $this->oDb->prepare('SELECT * FROM Categorie ORDER BY idCategorie DESC');
-    $oStmt->execute();
-    return $oStmt->fetch(\PDO::FETCH_OBJ);
-  }
-
-  //get some product according custom limits (good for pagination etc)
-  public function getSomePlantes($iOffset, $iLimit)
-  {
-    $oStmt = $this->oDb->prepare('SELECT * FROM Plantes ORDER BY createdDate DESC LIMIT :offset, :limit');
-    $oStmt->bindParam(':offset', $iOffset, \PDO::PARAM_INT);
-    $oStmt->bindParam(':limit', $iLimit, \PDO::PARAM_INT);
+    $oStmt = $this->oDb->prepare('SELECT * FROM Categories ORDER BY idCategorie ASC');
     $oStmt->execute();
     return $oStmt->fetchAll(\PDO::FETCH_OBJ);
   }
+  public function getPlantesByCategories($iIdCat)
+  {
+    $oStmt = $this->oDb->prepare('SELECT * FROM Plantes WHERE idCategorie = :idCat');
+    $oStmt->bindValue(':idCat', $iIdCat, \PDO::PARAM_INT);
+    $oStmt->execute();
+    return $oStmt->fetchAll(\PDO::FETCH_OBJ);
+  }
+
+  //get some product according custom limits (good for pagination etc)
+  // public function getSomePlantes($iOffset, $iLimit)
+  // {
+  //   $oStmt = $this->oDb->prepare('SELECT * FROM Plantes ORDER BY createdDate DESC LIMIT :offset, :limit');
+  //   $oStmt->bindParam(':offset', $iOffset, \PDO::PARAM_INT);
+  //   $oStmt->bindParam(':limit', $iLimit, \PDO::PARAM_INT);
+  //   $oStmt->execute();
+  //   return $oStmt->fetchAll(\PDO::FETCH_OBJ);
+  // }
+
   //get specific product
   public function getPlanteById($iPlanteId)
   {
     $oStmt = $this->oDb->prepare('SELECT * FROM Plantes WHERE idPlante = :planteId LIMIT 1');
-    $oStmt->bindParam(':planteId', $iPlanteId, \PDO::PARAM_INT);
+    $oStmt->bindValue(':planteId', $iPlanteId, \PDO::PARAM_INT);
     $oStmt->execute();
     return $oStmt->fetch(\PDO::FETCH_OBJ);
   }
+
   // get all products
   public function getAllPlantes()
   {
-    $oStmt = $this->oDb->query('SELECT * FROM Plantes ORDER BY createdDate DESC');
+    $oStmt = $this->oDb->query('SELECT * FROM Plantes ORDER BY createdDate_Plante DESC');
     return $oStmt->fetchAll(\PDO::FETCH_OBJ);
   }
 
-  public function getPlantesByCategories($iIdCat)
-  {
-    $oStmt = $this->oDb->query('SELECT * FROM Plantes WHERE idCategorie = :idCat ORDER BY createdDate DESC');
-    $oStmt->bindParam(':idCat', $iIdCat, \PDO::PARAM_INT);
-    return $oStmt->fetchAll(\PDO::FETCH_OBJ);
-  }
+  
 
   public function userIsAdmin($sEmail)
   {
@@ -163,7 +167,7 @@ class Shop
   {
     $oStmt = $this->oDb->prepare('DELETE FROM Utilisateurs WHERE email_Utilisateur = :email AND password_Utilisateur = :password');
     $oStmt->bindParam(':email', $aData['userEmail'], \PDO::PARAM_STR);
-    $oStmt->bindParam(':password', $aData['userPassword'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':password', $aData['userPassword'], \PDO::PARAM_STR);
     return $oStmt->execute();
   }
 

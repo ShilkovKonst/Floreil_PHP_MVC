@@ -8,5 +8,5 @@ ErrorDocument 504 /FloreilMVC/view/error.php
 
 RewriteEngine On
 RewriteRule ^([^_]*)_([^_]*)\.html$ /FloreilMVC/?p=$1&a=$2 [L]
-RewriteRule ^([^_]*)_([^_]*)_([^_]*)\.html$ /FloreilMVC/?p=$1&a=$2&id=$3 [L]
-RewriteRule ^([^_]*)_([^_]*)_([^_]*)_([^_]*)_([^_]*)\.html$ /FloreilMVC/?p=$1&a=$2&postid=$3&commentId=$4&vote=$5 [L]
+RewriteRule ^([^_]*)_([^_]*)_([^_]*)\.html$ /FloreilMVC/?p=$1&a=$2&idcat=$3 [L]
+RewriteRule ^([^_]*)_([^_]*)_([^_]*)_([^_]*)\.html$ /FloreilMVC/?p=$1&a=$2&idcat=$3&idplante=$4 [L]

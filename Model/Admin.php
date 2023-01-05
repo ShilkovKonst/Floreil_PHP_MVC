@@ -42,11 +42,11 @@ class Admin extends Shop
         $oStmt->bindValue(':feuillage', $aData['feuillage'], \PDO::PARAM_STR);
         $oStmt->bindValue(':arrosage', $aData['arrosage'], \PDO::PARAM_STR);
         $oStmt->bindValue(':floraison', $aData['floraison'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':floraisonParfume', $aData['floraisonParfume'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':floraisonParfume', $aData['floraisonParfume'], \PDO::PARAM_INT);
         $oStmt->bindValue(':modeVie', $aData['modeVie'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':resFroid', $aData['resFroid'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':resFroidBas', $aData['resFroidBas'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':resFroidHaut', $aData['resFroidHaut'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':resFroid', $aData['resFroid'], \PDO::PARAM_INT);
+        $oStmt->bindValue(':resFroidBas', $aData['resFroidBas'], \PDO::PARAM_INT);
+        $oStmt->bindValue(':resFroidHaut', $aData['resFroidHaut'], \PDO::PARAM_INT);
         return $oStmt->execute();
     }
 

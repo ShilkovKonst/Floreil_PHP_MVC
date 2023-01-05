@@ -12,6 +12,7 @@ class Shop
 
     protected $oUtil;
     protected $oModel;
+    private $_iIdCategorie;
     private $_iIdPlante;
 
     public function __construct()
@@ -28,7 +29,8 @@ class Shop
         $this->oModel = new \Floreil_PHP_MVC\Model\Shop;
 
         /** Récupère l'identifiant de publication dans le constructeur afin d'éviter la duplication du même code **/
-        $this->_iIdPlante = (int) (!empty($_GET['idPlante']) ? $_GET['idPlante'] : 0);
+        $this->_iIdCategorie = (int) (!empty($_GET['idcat']) ? $_GET['idcat'] : 0);
+        $this->_iIdPlante = (int) (!empty($_GET['idplante']) ? $_GET['idplante'] : 0);
     }
 
     /* ================ ACTIONS AVEC VUS ================ */
@@ -36,7 +38,7 @@ class Shop
     // On obtient les categories (interieur et exterieur) puis on affiche index.php
     public function index()
     {
-        $this->oUtil->oPlantes = $this->oModel->getCategorie();
+        $this->oUtil->oCategories = $this->oModel->getCategories();
 
         $this->oUtil->getView('index');
     }
@@ -47,6 +49,14 @@ class Shop
         header('HTTP/1.0 404 Not Found');
         $this->oUtil->getView('not_found');
     }
+
+    // On obtient tous les plantes par categories puis on affiche la page categorie.php
+    public function plantesCat()
+	{
+		$this->oUtil->oPlantes = $this->oModel->getPlantesByCategories($this->_iIdCategorie);
+
+		$this->oUtil->getView('categorie');
+	}
 
     // Récupère les données du plante, les commentaires associés puis affiche la page plante.php
     public function plante()
@@ -69,25 +79,17 @@ class Shop
                     'body_Comment' => htmlspecialchars($_POST['body_Comment']), 
                     'idPlante' => $_GET['idPlante']);
                 $this->oModel->addComment($aData);
-?>
-<script>
-    window.location.replace('shop_plante_<?= $_GET['idPlante'] ?>.html');
-</script>
-<?php   
+        ?>
+        <script>
+            window.location.replace('shop_plante_<?= $_GET['idPlante'] ?>.html');
+        </script>
+        <?php   
                 $this->oUtil->sSuccMsg = 'Le Commentaire a été posté !';
             }
         }
 
-        $this->oUtil->getView('shop');
+        $this->oUtil->getView('plante');
     }
-
-// On obtient tous les plantes par categories puis on affiche la page chapters.php
-    public function plantesByCategories($CatName)
-	{
-		$this->oUtil->oPlantes = $this->oModel->getPlantesByCategories($CatName);
-
-		$this->oUtil->getView('plantes');
-	}
 
     public function login()
 	{

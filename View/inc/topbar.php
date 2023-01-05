@@ -11,7 +11,7 @@
 				<ul class="right hide-on-med-and-down">
 
 					<li class="<?php echo ($_GET['a']=="index")?"active" : ""; ?>"><a href="<?=ROOT_URL?>shop_index.html">Accueil</a></li>
-					<li class="<?php echo ($_GET['a']=="chapters")?"active" : ""; ?>"><a href="<?=ROOT_URL?>shop_chapters.html">Chapitres</a></li>
+					<li class="<?php echo ($_GET['a']=="plantes")?"active" : ""; ?>"><a href="<?=ROOT_URL?>shop_plantes.html">Chapitres</a></li>
 
 					<?php if (empty($_SESSION['is_admin']) && empty($_SESSION['is_user'])): ?>
 					<li><a href="<?=ROOT_URL?>shop_login.html" class="btn green waves-effect waves-light">Connexion<i class="material-icons right">lock_open</i></a></li>
@@ -33,7 +33,7 @@
 				<ul class="side-nav" id="mobile-menu">
 
 					<li class="<?php echo ($_GET['a']=="index")?"active" : ""; ?>"><a href="<?=ROOT_URL?>shop_index.html">Accueil</a></li>
-					<li class="<?php echo ($_GET['a']=="chapters")?"active" : ""; ?>"><a href="<?=ROOT_URL?>shop_chapters.html">Chapitres</a></li>
+					<li class="<?php echo ($_GET['a']=="plantes")?"active" : ""; ?>"><a href="<?=ROOT_URL?>shop_plantes.html">Chapitres</a></li>
 
 					<?php if (empty($_SESSION['is_admin']) && empty($_SESSION['is_user'])): ?>
 					<li class="<?php echo ($_GET['a']=="login")?"active" : ""; ?>"><a href="<?=ROOT_URL?>shop_login.html">Connexion</a></li>
