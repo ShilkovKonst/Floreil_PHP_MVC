@@ -18,7 +18,6 @@
 						<option value="<?= $oCategorie->idCategorie ?>"><?= $oCategorie->nom_Categorie ?></option>
 					<?php endforeach ?>
 				</select>
-				<!-- <input type="text" name="idCategorie" id="idCategorie" required="required"> -->
 				<label for="idCategorie">Categorie du produit</label>
 			</div>
 
@@ -48,23 +47,13 @@
 			</div>
 
 			<div class="input-field col s12">
-				<label for="editable">Mode d'arrosage</label>
-				<br><br>
-				<textarea name="arrosage_Plante" id="editable1"></textarea>
+				<input type="text" name="arrosage_Plante" id="arrosage_Plante" required="required">
+				<label for="arrosage_Plante">Mode d'arrosage</label>
 			</div>
 
 			<div class="input-field col s12">
 				<input type="text" name="floraison_Plante" id="floraison_Plante" required="required">
 				<label for="floraison_Plante">Periode de floraison du produit</label>
-			</div>
-
-			<div class="input-field col s12">
-				<!-- <select id="floraisonParfume_Plante" name="floraisonParfume_Plante" required="required">
-					<option value="0">Non</option>
-					<option value="1">Oui</option>
-				</select> -->
-				<input type="text" name="floraisonParfume_Plante" id="floraisonParfume_Plante" required="required">
-				<label for="floraisonParfume_Plante">Floraison parfumé?</label>
 			</div>
 
 			<div class="input-field col s12">

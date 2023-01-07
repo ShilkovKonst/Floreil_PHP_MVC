@@ -20,9 +20,6 @@
                         <p><strong>Feuillage: </strong><?= nl2br($this->oPlante->feuillage_Plante) ?></p>
                         <p><strong>Arrosage: </strong><?= nl2br($this->oPlante->arrosage_Plante) ?></p>
                         <p><strong>Floraison: </strong><?= nl2br($this->oPlante->floraison_Plante) ?></p>
-                        <?php if ($this->oPlante->floraisonParfume_Plante == 0) : ?>
-                            <p><strong>Floraison parfumée:</strong> Non</p>
-                        <?php endif ?>
                         <p><strong>Mode de Vie: </strong><?= nl2br($this->oPlante->modeVie_Plante) ?></p>
                         <?php if ($this->oPlante->resistanceFroid_Plante != 0) : ?>
                             <p><strong>Résistance au froid:</strong> de <?= nl2br($this->oPlante->resistanceFroidBas_Plante) ?> à <?= nl2br($this->oPlante->resistanceFroidHaut_Plante) ?></p>

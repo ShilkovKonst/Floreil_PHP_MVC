@@ -7,9 +7,9 @@ class Admin extends Shop
 
     /////////////////////______READ______////////////////////////////////////////
 
-    public function inTable($sTable)
+    public function inTable($sTable, $sId)
     {
-        $oStmt = $this->oDb->query("SELECT COUNT(id) FROM $sTable");
+        $oStmt = $this->oDb->query("SELECT COUNT($sId) FROM $sTable");
         return $oStmt->fetch();
     }
     /////////////////////////////////////////////////////////////////////////////
@@ -28,10 +28,9 @@ class Admin extends Shop
         qnty_Plante = :qnty_Plante, 
         nomCommun_Plante = :nomCommun_Plante, 
         hauteurCM_Plante = :hauteurCM_Plante,
-        feillage_Plante = :feillage_Plante, 
+        feuillage_Plante = :feuillage_Plante, 
         arrosage_Plante = :arrosage_Plante,
         floraison_Plante = :floraison_Plante, 
-        floraisonParfume_Plante = :floraisonParfume_Plante,
         modeVie_Plante = :modeVie_Plante, 
         resistanceFroid_Plante = :resistanceFroid_Plante,
         resistanceFroidBas_Plante = :resistanceFroidBas_Plante, 
@@ -50,7 +49,6 @@ class Admin extends Shop
         $oStmt->bindValue(':feuillage_Plante', $aData['feuillage_Plante'], \PDO::PARAM_STR);
         $oStmt->bindValue(':arrosage_Plante', $aData['arrosage_Plante'], \PDO::PARAM_STR);
         $oStmt->bindValue(':floraison_Plante', $aData['floraison_Plante'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':floraisonParfume_Plante', $aData['floraisonParfume_Plante'], \PDO::PARAM_INT);
         $oStmt->bindValue(':modeVie_Plante', $aData['modeVie_Plante'], \PDO::PARAM_STR);
         $oStmt->bindValue(':resistanceFroid_Plante', $aData['resistanceFroid_Plante'], \PDO::PARAM_INT);
         $oStmt->bindValue(':resistanceFroidBas_Plante', $aData['resistanceFroidBas_Plante'], \PDO::PARAM_INT);
@@ -127,7 +125,6 @@ class Admin extends Shop
         feuillage_Plante, 
         arrosage_Plante,
         floraison_Plante, 
-        floraisonParfume_Plante,
         modeVie_Plante, 
         resistanceFroid_Plante,
         resistanceFroidBas_Plante, 
@@ -143,7 +140,6 @@ class Admin extends Shop
         :feuillage_Plante, 
         :arrosage_Plante,
         :floraison_Plante, 
-        :floraisonParfume_Plante,
         :modeVie_Plante, 
         :resistanceFroid_Plante,
         :resistanceFroidBas_Plante, 
@@ -158,7 +154,6 @@ class Admin extends Shop
         $oStmt->bindValue(':feuillage_Plante', $aData['feuillage_Plante'], \PDO::PARAM_STR);
         $oStmt->bindValue(':arrosage_Plante', $aData['arrosage_Plante'], \PDO::PARAM_STR);
         $oStmt->bindValue(':floraison_Plante', $aData['floraison_Plante'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':floraisonParfume_Plante', $aData['floraisonParfume_Plante'], \PDO::PARAM_STR);
         $oStmt->bindValue(':modeVie_Plante', $aData['modeVie_Plante'], \PDO::PARAM_STR);
         $oStmt->bindValue(':resistanceFroid_Plante', $aData['resistanceFroid_Plante'], \PDO::PARAM_STR);
         $oStmt->bindValue(':resistanceFroidBas_Plante', $aData['resistanceFroidBas_Plante'], \PDO::PARAM_STR);

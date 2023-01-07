@@ -21,18 +21,19 @@ class Admin extends Shop
     // Si on modifie l'image associée, on vérifie que l'extension existe (jpg, png ...)
     public function editPlante()
     {
+        $this->oUtil->oCategories = $this->oModel->getCategories();
         if (!$this->isLogged())
             header('Location: shop_index.html');
 
         if (isset($_POST['edit_submit'])) {
             if (
-                empty($_POST['title']) || empty($_POST['description'])
-                || empty($_POST['price']) || empty($_POST['qnty'])
-                || empty($_POST['nomCommun']) || empty($_POST['hauteurCM'])
-                || empty($_POST['feillage']) || empty($_POST['arrosage'])
-                || empty($_POST['floraison']) || empty($_POST['floraisonParfume'])
-                || empty($_POST['modeVie']) || empty($_POST['resFroid'])
-                || empty($_POST['resFroidBas']) || empty($_POST['resFroidHaut'])
+                empty($_POST['title_Plante']) || empty($_POST['description_Plante'])
+                || empty($_POST['prix_Plante']) || empty($_POST['qnty_Plante'])
+                || empty($_POST['nomCommun_Plante']) || empty($_POST['hauteurCM_Plante'])
+                || empty($_POST['feuillage_Plante']) || empty($_POST['arrosage_Plante'])
+                || empty($_POST['floraison_Plante']) || empty($_POST['modeVie_Plante']) 
+                || empty($_POST['resistanceFroid_Plante']) || empty($_POST['resistanceFroidBas_Plante']) 
+                || empty($_POST['idCategorie']) || empty($_POST['idCategorie'])
             ) {
                 $this->oUtil->sErrMsg = 'Tous les champs doivent être remplis.';
             } else {
@@ -41,20 +42,20 @@ class Admin extends Shop
 
                 $aData = array(
                     'idPlante' => $_GET['id'],
-                    'title_Plante' => $_POST['title'],
-                    'description_Plante' => $_POST['description'],
-                    'prix_Plante' => $_POST['price'],
-                    'qnty_Plante' => $_POST['qnty'],
-                    'nomCommun_Plante' => $_POST['nomCommun'],
-                    'hauteurCM_Plante' => $_POST['hauteurCM'],
-                    'feillage_Plante' => $_POST['feillage'],
-                    'arrosage_Plante' => $_POST['arrosage'],
-                    'floraison_Plante' => $_POST['floraison'],
-                    'floraisonParfume_Plante' => $_POST['floraisonParfume'],
-                    'modeVie_Plante' => $_POST['modeVie'],
-                    'resistanceFroid_Plante' => $_POST['resFroid'],
-                    'resistanceFroidBas_Plante' => $_POST['resFroidBas'],
-                    'resistanceFroidHaut_Plante' => $_POST['resFroidHaut'],
+                    'title_Plante' => $_POST['title_Plante'],
+                    'description_Plante' => $_POST['description_Plante'],
+                    'prix_Plante' => $_POST['prix_Plante'],
+                    'qnty_Plante' => $_POST['qnty_Plante'],
+                    'nomCommun_Plante' => $_POST['nomCommun_Plante'],
+                    'hauteurCM_Plante' => $_POST['hauteurCM_Plante'],
+                    'feuillage_Plante' => $_POST['feuillage_Plante'],
+                    'arrosage_Plante' => $_POST['arrosage_Plante'],
+                    'floraison_Plante' => $_POST['floraison_Plante'],
+                    'modeVie_Plante' => $_POST['modeVie_Plante'],
+                    'resistanceFroid_Plante' => $_POST['resistanceFroid_Plante'],
+                    'resistanceFroidBas_Plante' => $_POST['resistanceFroidBas_Plante'],
+                    'resistanceFroidHaut_Plante' => $_POST['resistanceFroidHaut_Plante'],
+                    'idCategorie' => $_POST['idCategorie'],
                 );
                 $this->oModel->updatePlante($aData);
 
@@ -95,10 +96,9 @@ class Admin extends Shop
                 || empty($_POST['prix_Plante']) || empty($_POST['qnty_Plante'])
                 || empty($_POST['nomCommun_Plante']) || empty($_POST['hauteurCM_Plante'])
                 || empty($_POST['feuillage_Plante']) || empty($_POST['arrosage_Plante'])
-                || empty($_POST['floraison_Plante']) /*|| empty($_POST['floraisonParfume_Plante'])*/
-                || empty($_POST['modeVie_Plante']) || empty($_POST['resistanceFroid_Plante'])
-                || empty($_POST['resistanceFroidBas_Plante']) || empty($_POST['resistanceFroidHaut_Plante'])
-                || empty($_POST['idCategorie'])
+                || empty($_POST['floraison_Plante']) || empty($_POST['modeVie_Plante']) 
+                || empty($_POST['resistanceFroid_Plante']) || empty($_POST['resistanceFroidBas_Plante']) 
+                || empty($_POST['resistanceFroidHaut_Plante']) || empty($_POST['idCategorie'])
             ) {
                 $this->oUtil->sErrMsg = 'Tous les champs doivent être remplis.';
             } else {
@@ -116,7 +116,6 @@ class Admin extends Shop
                     'feuillage_Plante' => $_POST['feuillage_Plante'],
                     'arrosage_Plante' => $_POST['arrosage_Plante'],
                     'floraison_Plante' => $_POST['floraison_Plante'],
-                    'floraisonParfume_Plante' => $_POST['floraisonParfume_Plante'],
                     'modeVie_Plante' => $_POST['modeVie_Plante'],
                     'resistanceFroid_Plante' => $_POST['resistanceFroid_Plante'],
                     'resistanceFroidBas_Plante' => $_POST['resistanceFroidBas_Plante'],
@@ -155,14 +154,20 @@ class Admin extends Shop
 
       $tables = [
       	'Plantes' 	      	 => 'Plantes',
-      	'Commentaires' 	  	 => 'poster_comment',
-      	'Utilisateurs' 	     => 'Users'
+      	'Commentaires'  	 => 'poster_comment',
+      	'Utilisateurs' 	     => 'Utilisateurs'
       ];
 
       $colors = [
       	'Plantes'			 => 'green',
       	'poster_comment' 	 => 'brown',
-      	'Users' 			 => 'blue'
+      	'Utilisateurs'		 => 'blue'
+      ];
+
+      $ids = [
+        'Plantes'			 => 'idPlante',
+      	'poster_comment' 	 => 'idUtilisateur',
+      	'Utilisateurs'		 => 'idUtilisateur'
       ];
 
       $this->oUtil->aColors = array();
@@ -172,7 +177,7 @@ class Admin extends Shop
       foreach ($tables as $table_name => $table)
       {
         $this->oUtil->aColors[] = $this->getColor($table,$colors);
-        $this->oUtil->aInTable[] = $this->oModel->inTable($table);
+        $this->oUtil->aInTable[] = $this->oModel->inTable($table, $ids[$table]);
         $this->oUtil->aTableName[] = $table_name;
       }
 
