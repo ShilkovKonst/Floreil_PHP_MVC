@@ -40,7 +40,7 @@ class Admin extends Shop
                 $this->oModel = new \Floreil_PHP_MVC\Model\Admin;
 
                 $aData = array(
-                    'idPlante' => $_GET['idPlante'],
+                    'idPlante' => $_GET['id'],
                     'title_Plante' => $_POST['title'],
                     'description_Plante' => $_POST['description'],
                     'prix_Plante' => $_POST['price'],
@@ -50,7 +50,7 @@ class Admin extends Shop
                     'feillage_Plante' => $_POST['feillage'],
                     'arrosage_Plante' => $_POST['arrosage'],
                     'floraison_Plante' => $_POST['floraison'],
-                    'floraisonParfumee_Plante' => $_POST['floraisonParfume'],
+                    'floraisonParfume_Plante' => $_POST['floraisonParfume'],
                     'modeVie_Plante' => $_POST['modeVie'],
                     'resistanceFroid_Plante' => $_POST['resFroid'],
                     'resistanceFroidBas_Plante' => $_POST['resFroidBas'],
@@ -62,11 +62,11 @@ class Admin extends Shop
                     $file = $_FILES['image']['name'];
                     $extensions = ['.png', '.jpg', '.jpeg', '.gif', '.PNG', '.JPG', '.JPEG', '.GIF'];
                     $extension = strrchr($file, '.');
-                    $idPlante = $_GET['idPlante'];
+                    $idPlante = $_GET['id'];
                     if (!in_array($extension, $extensions)) {
                         $this->oUtil->sErrMsg = "Cette image n'est pas valable";
                     }
-                    $this->oModel->updateImg($_FILES['image']['name'], $_GET['idPlante'], $_FILES['image']['tmp_name']);
+                    $this->oModel->updateImg($_FILES['image']['name'], $_GET['id'], $_FILES['image']['tmp_name']);
                 }
 
                 $this->oUtil->sSuccMsg = 'L\'article a bien été mis à jour !';
@@ -74,7 +74,7 @@ class Admin extends Shop
             }
         }
         /* Récupère les données du post */
-        $this->oUtil->oPlante = $this->oModel->getPlanteById($_GET['idPlante']);
+        $this->oUtil->oPlante = $this->oModel->getPlanteById($_GET['id']);
 
         $this->oUtil->getView('edit_plante');
     }
@@ -84,18 +84,21 @@ class Admin extends Shop
     // Si il n'y a pas d'image associée, alors l'image de base sera post.png
     public function addPlante()
     {
+        $this->oUtil->oCategories = $this->oModel->getCategories();
+
         if (!$this->isLogged())
             header('Location: shop_index.html');
 
         if (isset($_POST['add_submit'])) {
             if (
-                empty($_POST['title']) || empty($_POST['description'])
-                || empty($_POST['price']) || empty($_POST['qnty'])
-                || empty($_POST['nomCommun']) || empty($_POST['hauteurCM'])
-                || empty($_POST['feillage']) || empty($_POST['arrosage'])
-                || empty($_POST['floraison']) || empty($_POST['floraisonParfume'])
-                || empty($_POST['modeVie']) || empty($_POST['resFroid'])
-                || empty($_POST['resFroidBas']) || empty($_POST['resFroidHaut'])
+                empty($_POST['title_Plante']) || empty($_POST['description_Plante'])
+                || empty($_POST['prix_Plante']) || empty($_POST['qnty_Plante'])
+                || empty($_POST['nomCommun_Plante']) || empty($_POST['hauteurCM_Plante'])
+                || empty($_POST['feuillage_Plante']) || empty($_POST['arrosage_Plante'])
+                || empty($_POST['floraison_Plante']) /*|| empty($_POST['floraisonParfume_Plante'])*/
+                || empty($_POST['modeVie_Plante']) || empty($_POST['resistanceFroid_Plante'])
+                || empty($_POST['resistanceFroidBas_Plante']) || empty($_POST['resistanceFroidHaut_Plante'])
+                || empty($_POST['idCategorie'])
             ) {
                 $this->oUtil->sErrMsg = 'Tous les champs doivent être remplis.';
             } else {
@@ -103,25 +106,26 @@ class Admin extends Shop
                 $this->oModel = new \Floreil_PHP_MVC\Model\Admin;
 
                 $aData = array(
-                    /* 'created_date' => date('Y-m-d H:i:s'), */
-                    'title_Plante' => $_POST['title'],
-                    'description_Plante' => $_POST['description'],
-                    'prix_Plante' => $_POST['price'],
-                    'qnty_Plante' => $_POST['qnty'],
-                    'nomCommun_Plante' => $_POST['nomCommun'],
-                    'hauteurCM_Plante' => $_POST['hauteurCM'],
-                    'feillage_Plante' => $_POST['feillage'],
-                    'arrosage_Plante' => $_POST['arrosage'],
-                    'floraison_Plante' => $_POST['floraison'],
-                    'floraisonParfumee_Plante' => $_POST['floraisonParfume'],
-                    'modeVie_Plante' => $_POST['modeVie'],
-                    'resistanceFroid_Plante' => $_POST['resFroid'],
-                    'resistanceFroidBas_Plante' => $_POST['resFroidBas'],
-                    'resistanceFroidHaut_Plante' => $_POST['resFroidHaut']
+                    'idCategorie' => $_POST['idCategorie'],
+                    'title_Plante' => $_POST['title_Plante'],
+                    'description_Plante' => $_POST['description_Plante'],
+                    'prix_Plante' => $_POST['prix_Plante'],
+                    'qnty_Plante' => $_POST['qnty_Plante'],
+                    'nomCommun_Plante' => $_POST['nomCommun_Plante'],
+                    'hauteurCM_Plante' => $_POST['hauteurCM_Plante'],
+                    'feuillage_Plante' => $_POST['feuillage_Plante'],
+                    'arrosage_Plante' => $_POST['arrosage_Plante'],
+                    'floraison_Plante' => $_POST['floraison_Plante'],
+                    'floraisonParfume_Plante' => $_POST['floraisonParfume_Plante'],
+                    'modeVie_Plante' => $_POST['modeVie_Plante'],
+                    'resistanceFroid_Plante' => $_POST['resistanceFroid_Plante'],
+                    'resistanceFroidBas_Plante' => $_POST['resistanceFroidBas_Plante'],
+                    'resistanceFroidHaut_Plante' => $_POST['resistanceFroidHaut_Plante']
                 );
                 $this->oModel->addPlante($aData);
 
-                if (!empty($_FILES['image']['name'])) {
+                if (!empty($_FILES['image']['name'])) 
+                {
                     $file = $_FILES['image']['name'];
                     $extensions = ['.png', '.jpg', '.jpeg', '.gif', '.PNG', '.JPG', '.JPEG', '.GIF'];
                     $extension = strrchr($file, '.');
@@ -188,8 +192,8 @@ class Admin extends Shop
       $this->oUtil->getModel('Admin');
       $this->oModel = new \Floreil_PHP_MVC\Model\Admin;
 
-      $this->oModel->deleteCommentsFromPlante($_GET['idPlante']); // supprime les commentaires du plante
-      $this->oModel->deletePlante($_GET['idPlante']); // supprime le plante
+      $this->oModel->deleteCommentsFromPlante($_GET['id']); // supprime les commentaires du plante
+      $this->oModel->deletePlante($_GET['id']); // supprime le plante
 
       header('Location: admin_edit.html');
     }
@@ -200,15 +204,15 @@ class Admin extends Shop
       if (!$this->isLogged())
       header('Location: blog_index.html');
 
-      $oPlante = $this->oUtil->oPlante = $this->oModel->getPlanteById($_GET['idPlante']); // Récupère les données du plante
+      $oPlante = $this->oUtil->oPlante = $this->oModel->getPlanteById($_GET['id']); // Récupère les données du plante
       $this->oUtil->getModel('Admin');
       $this->oModel = new \Floreil_PHP_MVC\Model\Admin;
 
-      $iIdPlante = $_GET['idPlante'];
-      $iIdUser = $_GET['idUtilisateur'];
+      $iIdPlante = $_GET['id'];
+      $iIdUser = $_GET['idsup'];
       $this->oModel->deleteComment($iIdUser, $iIdPlante); // supprime le commentaire
 
-      header("Location: shop_plante_$oPlante->id.html");
+      header("Location: shop_plante_$oPlante->idPlante.html");
     }
 
     // On obtient la couleur associé à chaque table

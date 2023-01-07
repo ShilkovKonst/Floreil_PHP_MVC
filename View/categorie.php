@@ -1,8 +1,9 @@
 <?php require 'inc/header.php' ?>
 <?php require 'inc/topbar.php' ?>
 <main>
-  <div class="container">
-    <h1 class="page-title">Liste des <?//=$oCategorie->nom_Categorie ?></h1> 
+<?php foreach ($this->oCategorie as $oCategorie): ?>
+  <div class="container">  
+    <h1 class="page-title">Liste des <?=$oCategorie->nom_Categorie ?></h1> 
     <?php foreach ($this->oPlantes as $oPlante): ?>
       <div class="row">
         <hr>
@@ -25,5 +26,6 @@
   		</div>
     <?php endforeach ?>
   </div>
+  <?php endforeach ?>
 </main>
 <?php require 'inc/footer.php' ?>

@@ -11,7 +11,7 @@
 				<ul class="right hide-on-med-and-down">
 
 					<li class="<?php echo ($_GET['a']=="index")?"active" : ""; ?>"><a href="<?=ROOT_URL?>shop_index.html">Accueil</a></li>
-					<li class="<?php echo ($_GET['a']=="plantes")?"active" : ""; ?>"><a href="<?=ROOT_URL?>shop_plantes.html">Chapitres</a></li>
+					<li class="<?php echo ($_GET['a']=="plantes")?"active" : ""; ?>"><a href="<?=ROOT_URL?>shop_plantes.html">Panier</a></li>
 
 					<?php if (empty($_SESSION['is_admin']) && empty($_SESSION['is_user'])): ?>
 					<li><a href="<?=ROOT_URL?>shop_login.html" class="btn green waves-effect waves-light">Connexion<i class="material-icons right">lock_open</i></a></li>
@@ -28,6 +28,7 @@
 					<?php if (!empty($_SESSION['is_admin']) || !empty($_SESSION['is_user'])): ?>
 					<li><a href="<?=ROOT_URL?>?p=shop&amp;a=logout" class="btn red waves-effect waves-light">Déconnexion<i class="material-icons right">lock_outline</i></a></li>
 					<?php endif ?>
+					<li><?= current($_SESSION) ?></li>
 				</ul>
 
 				<ul class="side-nav" id="mobile-menu">

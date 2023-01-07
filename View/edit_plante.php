@@ -4,47 +4,47 @@
 <div class="container">
 	<?php require 'inc/msg.php' ?>
 
-	<?php if (empty($this->oPost)) : ?>
-		<p class="error">Cet article n'existe pas !</p>
+	<?php if (empty($this->oPlante)) : ?>
+		<p class="error">Ce plante n'existe pas !</p>
 	<?php else : ?>
 		<h1>Modifier le produit :</h1>
 		<form method="post" enctype="multipart/form-data">
 			<div class="row">
 
 				<div class="input-field col s12">
-					<input type="text" name="title" id="title" value="<?= htmlspecialchars($this->oPost->title) ?>" required="required">
+					<input type="text" name="title" id="title" value="<?= htmlspecialchars($this->oPlante->title_Plante) ?>" required="required">
 					<label for="title">Titre du produit</label>
 				</div>				
 				
 				<div class="input-field col s12">
-					<input type="text" name="hauteurCM" id="hauteurCM" value="<?= htmlspecialchars($this->oPost->hauteurCM) ?>" required="required">
+					<input type="text" name="hauteurCM" id="hauteurCM" value="<?= htmlspecialchars($this->oPlante->hauteurCM_Plante) ?>" required="required">
 					<label for="hauteurCM">Hauteur du produit</label>
 				</div>
 
 				<div class="input-field col s12">
-					<input type="text" name="feuillage" id="feuillage" value="<?= htmlspecialchars($this->oPost->feuillage) ?>" required="required">
+					<input type="text" name="feuillage" id="feuillage" value="<?= htmlspecialchars($this->oPlante->feuillage_Plante) ?>" required="required">
 					<label for="feuillage">Type de feuillage du produit</label>
 				</div>
 
 				<div class="input-field col s12">
-					<input type="text" name="floraison" id="floraison" value="<?= htmlspecialchars($this->oPost->floraison) ?>" required="required">
+					<input type="text" name="floraison" id="floraison" value="<?= htmlspecialchars($this->oPlante->floraison_Plante) ?>" required="required">
 					<label for="floraison">Periode de floraison du produit</label>
 				</div>
 
 				<div class="input-field col s12">
-					<input type="text" name="modeVie" id="modeVie" value="<?= htmlspecialchars($this->oPost->modeVie) ?>" required="required">
+					<input type="text" name="modeVie" id="modeVie" value="<?= htmlspecialchars($this->oPlante->modeVie_Plante) ?>" required="required">
 					<label for="modeVie">Mode de vie du produit</label>
 				</div>
 
 				<div class="input-field col s12">
-					<input type="text" name="nomCommun" id="nomCommun" value="<?= htmlspecialchars($this->oPost->nomCommun) ?>" required="required">
+					<input type="text" name="nomCommun" id="nomCommun" value="<?= htmlspecialchars($this->oPlante->nomCommun_Plante) ?>" required="required">
 					<label for="nomCommun">Nom commun du produit</label>
 				</div>
 				
 				<div class="input-field col s12">
 					<label for="editable">Description du produit</label>
 					<br>
-					<textarea name="body" id="editable" class="materialize-textarea"><?= $this->oPost->body ?></textarea>
+					<textarea name="body" id="editable" class="materialize-textarea"><?= $this->oPlante->description_Plante ?></textarea>
 				</div>
 
 				<div class="col s6 left-align">

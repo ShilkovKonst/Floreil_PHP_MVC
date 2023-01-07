@@ -18,6 +18,15 @@ class Shop
     $oStmt->execute();
     return $oStmt->fetchAll(\PDO::FETCH_OBJ);
   }
+
+  public function getCategorie($iIdCat)
+  {
+    $oStmt = $this->oDb->prepare('SELECT * FROM Categories WHERE idCategorie = :idCat');
+    $oStmt->bindValue(':idCat', $iIdCat, \PDO::PARAM_INT);
+    $oStmt->execute();
+    return $oStmt->fetchAll(\PDO::FETCH_OBJ);
+  }
+
   public function getPlantesByCategories($iIdCat)
   {
     $oStmt = $this->oDb->prepare('SELECT * FROM Plantes WHERE idCategorie = :idCat');
@@ -51,8 +60,6 @@ class Shop
     $oStmt = $this->oDb->query('SELECT * FROM Plantes ORDER BY createdDate_Plante DESC');
     return $oStmt->fetchAll(\PDO::FETCH_OBJ);
   }
-
-  
 
   public function userIsAdmin($sEmail)
   {
@@ -89,7 +96,7 @@ class Shop
     return $oStmt->rowCount();
   }
   // this is Patrick's code, don't understand logic 
-  public function getUserId($username)
+  public function getUserID($username)
   {
     $oStmt = $this->oDb->prepare('SELECT idUtilisateur FROM Utilisateurs WHERE username_Utilisateur = :username');
     $oStmt->bindParam(':username', $username, \PDO::PARAM_STR);
@@ -100,21 +107,22 @@ class Shop
   //remade Patrick's method according to my Comments table
   public function getComments()
   {
-    $oStmt = $this->oDb->query("
+    $oStmt = $this->oDb->prepare("
     SELECT  
-            Utilisateurs.idUtilisateur,
             poster_comment.idUtilisateur,
             poster_comment.title_Comment,
             poster_comment.body_Comment,
             poster_comment.idPlante,
             poster_comment.date_Comment,
-            Utilisateurs.username_Utilisateur,
+            Utilisateurs.username_Utilisateur
     FROM poster_comment
     JOIN Utilisateurs
     ON poster_comment.idUtilisateur = Utilisateurs.idUtilisateur
-    WHERE idPlante = '{$_GET['id']}'
-    ORDER BY date DESC
+    WHERE poster_comment.idPlante = :idPlante
+    ORDER BY poster_comment.date_Comment DESC
        ");
+    $oStmt->bindValue(':idPlante', $_GET['id'], \PDO::PARAM_INT);
+    $oStmt->execute();
     return $oStmt->fetchAll(\PDO::FETCH_OBJ);
   }
 
@@ -152,13 +160,39 @@ class Shop
 
   public function addComment(array $aData)
   {
-    $oStmt = $this->oDb->prepare('INSERT INTO poster_comment (idUtilisateur, title_Comment, body_Comment, idPlante) VALUES(:user_id, :title, :comment, :plante_id');
-    return $oStmt->execute($aData);
+    $oStmt = $this->oDb->prepare('
+    INSERT INTO 
+    poster_comment (idUtilisateur, title_Comment, body_Comment, idPlante) 
+    VALUES
+    (:idUtilisateur, :title_Comment, :body_Comment, :idPlante)');
+    $oStmt->bindValue(':idUtilisateur', $aData['idUtilisateur'], \PDO::PARAM_INT);
+    $oStmt->bindValue(':title_Comment', $aData['title_Comment'], \PDO::PARAM_STR);
+    $oStmt->bindValue(':body_Comment', $aData['body_Comment'], \PDO::PARAM_STR);
+    $oStmt->bindValue(':idPlante', $aData['idPlante'], \PDO::PARAM_INT);
+    return $oStmt->execute();
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   ////////////////////////////_____UPDATE_____//////////////////////////////////////////////////////////////////////////////////
+  public function editComment(array $aData)
+  {
+    $oStmt = $this->oDb->prepare('
+    UPDATE 
+        poster_comment 
+    SET     
+        title_Comment = :title_Comment, 
+        body_Comment = :body_Comment  
+    WHERE 
+        idUtilisateur = :idUtilisateur 
+      AND
+        idPlante = :idPlante');
+    $oStmt->bindValue(':idUtilisateur', $aData['idUtilisateur'], \PDO::PARAM_INT);
+    $oStmt->bindValue(':title_Comment', $aData['title_Comment'], \PDO::PARAM_STR);
+    $oStmt->bindValue(':body_Comment', $aData['body_Comment'], \PDO::PARAM_STR);
+    $oStmt->bindValue(':idPlante', $aData['idPlante'], \PDO::PARAM_INT);
+    return $oStmt->execute();
+  }
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   ////////////////////////////_____DELETE_____//////////////////////////////////////////////////////////////////////////////////
@@ -171,5 +205,5 @@ class Shop
     return $oStmt->execute();
   }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

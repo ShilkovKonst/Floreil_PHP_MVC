@@ -22,31 +22,40 @@ class Admin extends Shop
     UPDATE 
         Plantes 
     SET 
-        title_Plante = :title, description_Plante = :description, 
-        prix_Plante = :price, qnty_Plante = :qnty, 
-        nomCommun_Plante = :nomCommun, hauteurCM_Plante = :hauteurCM,
-        feillage_Plante = :feillage, arrosage_Plante = :arrosage,
-        floraison_Plante = :floraison, floraisonParfumee_Plante = :floraisonParfume,
-        modeVie_Plante = :modeVie, resistanceFroid_Plante = :resFroid,
-        resistanceFroidBas_Plante = :resFroidBas, resistanceFroidHaut_Plante = :resFroidHaut
+        title_Plante = :title_Plante, 
+        description_Plante = :description_Plante, 
+        prix_Plante = :prix_Plante, 
+        qnty_Plante = :qnty_Plante, 
+        nomCommun_Plante = :nomCommun_Plante, 
+        hauteurCM_Plante = :hauteurCM_Plante,
+        feillage_Plante = :feillage_Plante, 
+        arrosage_Plante = :arrosage_Plante,
+        floraison_Plante = :floraison_Plante, 
+        floraisonParfume_Plante = :floraisonParfume_Plante,
+        modeVie_Plante = :modeVie_Plante, 
+        resistanceFroid_Plante = :resistanceFroid_Plante,
+        resistanceFroidBas_Plante = :resistanceFroidBas_Plante, 
+        resistanceFroidHaut_Plante = :resistanceFroidHaut_Plante,
+        idCategorie = :idCategorie
     WHERE 
         idPlante = :idPlante 
     LIMIT 1');
         $oStmt->bindValue(':idPlante', $aData['idPlante'], \PDO::PARAM_INT);
-        $oStmt->bindValue(':title', $aData['title'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':description', $aData['description'], \PDO::PARAM_LOB);
-        $oStmt->bindValue(':price', $aData['price'], \PDO::PARAM_LOB);
-        $oStmt->bindValue(':qnty', $aData['qnty'], \PDO::PARAM_LOB);
-        $oStmt->bindValue(':nomCommun', $aData['nomCommun'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':hauteurCM', $aData['hauteurCM'], \PDO::PARAM_INT);
-        $oStmt->bindValue(':feuillage', $aData['feuillage'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':arrosage', $aData['arrosage'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':floraison', $aData['floraison'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':floraisonParfume', $aData['floraisonParfume'], \PDO::PARAM_INT);
-        $oStmt->bindValue(':modeVie', $aData['modeVie'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':resFroid', $aData['resFroid'], \PDO::PARAM_INT);
-        $oStmt->bindValue(':resFroidBas', $aData['resFroidBas'], \PDO::PARAM_INT);
-        $oStmt->bindValue(':resFroidHaut', $aData['resFroidHaut'], \PDO::PARAM_INT);
+        $oStmt->bindValue(':title_Plante', $aData['title_Plante'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':description_Plante', $aData['description_Plante'], \PDO::PARAM_LOB);
+        $oStmt->bindValue(':prix_Plante', $aData['prix_Plante'], \PDO::PARAM_LOB);
+        $oStmt->bindValue(':qnty_Plante', $aData['qnty_Plante'], \PDO::PARAM_LOB);
+        $oStmt->bindValue(':nomCommun_Plante', $aData['nomCommun_Plante'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':hauteurCM_Plante', $aData['hauteurCM_Plante'], \PDO::PARAM_INT);
+        $oStmt->bindValue(':feuillage_Plante', $aData['feuillage_Plante'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':arrosage_Plante', $aData['arrosage_Plante'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':floraison_Plante', $aData['floraison_Plante'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':floraisonParfume_Plante', $aData['floraisonParfume_Plante'], \PDO::PARAM_INT);
+        $oStmt->bindValue(':modeVie_Plante', $aData['modeVie_Plante'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':resistanceFroid_Plante', $aData['resistanceFroid_Plante'], \PDO::PARAM_INT);
+        $oStmt->bindValue(':resistanceFroidBas_Plante', $aData['resistanceFroidBas_Plante'], \PDO::PARAM_INT);
+        $oStmt->bindValue(':resistanceFroidHaut_Plante', $aData['resistanceFroidHaut_Plante'], \PDO::PARAM_INT);
+        $oStmt->bindValue(':idCategorie', $aData['idCategorie'], \PDO::PARAM_INT);
         return $oStmt->execute();
     }
 
@@ -71,7 +80,7 @@ class Admin extends Shop
         ];
 
         $oStmt = $this->oDb->prepare('UPDATE Plantes SET image_Plante = :image WHERE idPlante = :idPlante');
-        move_uploaded_file($tmp_imageName, "static/img/posts/" . $i['image']);
+        move_uploaded_file($tmp_imageName, "static/img/plantes/" . $i['image']);
         return $oStmt->execute($i);
     }
 
@@ -109,35 +118,52 @@ class Admin extends Shop
     {
         $oStmt = $this->oDb->prepare('
     INSERT INTO Plantes 
-        (title_Plante, description_Plante, 
-        prix_Plante, qnty_Plante, 
-        nomCommun_Plante, hauteurCM_Plante,
-        feillage_Plante, arrosage_Plante,
-        floraison_Plante, floraisonParfumee_Plante,
-        modeVie_Plante, resistanceFroid_Plante,
-        resistanceFroidBas_Plante, resistanceFroidHaut_Plante,) 
+        (title_Plante, 
+        description_Plante, 
+        prix_Plante, 
+        qnty_Plante, 
+        nomCommun_Plante, 
+        hauteurCM_Plante,
+        feuillage_Plante, 
+        arrosage_Plante,
+        floraison_Plante, 
+        floraisonParfume_Plante,
+        modeVie_Plante, 
+        resistanceFroid_Plante,
+        resistanceFroidBas_Plante, 
+        resistanceFroidHaut_Plante,
+        idCategorie) 
     VALUES
-        (:title, :description, 
-        :price, :qnty, 
-        :nomCommun, :hauteurCM,
-        :feillage, :arrosage,
-        :floraison, :floraisonParfume,
-        :modeVie, :resFroid,
-        :resFroidBas, :resFroidHaut)');
-        $oStmt->bindValue(':title', $aData['title'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':description', $aData['description'], \PDO::PARAM_LOB);
-        $oStmt->bindValue(':price', $aData['price'], \PDO::PARAM_LOB);
-        $oStmt->bindValue(':qnty', $aData['qnty'], \PDO::PARAM_LOB);
-        $oStmt->bindValue(':nomCommun', $aData['nomCommun'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':hauteurCM', $aData['hauteurCM'], \PDO::PARAM_INT);
-        $oStmt->bindValue(':feuillage', $aData['feuillage'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':arrosage', $aData['arrosage'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':floraison', $aData['floraison'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':floraisonParfume', $aData['floraisonParfume'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':modeVie', $aData['modeVie'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':resFroid', $aData['resFroid'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':resFroidBas', $aData['resFroidBas'], \PDO::PARAM_STR);
-        $oStmt->bindValue(':resFroidHaut', $aData['resFroidHaut'], \PDO::PARAM_STR);
+        (:title_Plante, 
+        :description_Plante, 
+        :prix_Plante, 
+        :qnty_Plante, 
+        :nomCommun_Plante, 
+        :hauteurCM_Plante,
+        :feuillage_Plante, 
+        :arrosage_Plante,
+        :floraison_Plante, 
+        :floraisonParfume_Plante,
+        :modeVie_Plante, 
+        :resistanceFroid_Plante,
+        :resistanceFroidBas_Plante, 
+        :resistanceFroidHaut_Plante,
+        :idCategorie)');
+        $oStmt->bindValue(':title_Plante', $aData['title_Plante'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':description_Plante', $aData['description_Plante'], \PDO::PARAM_LOB);
+        $oStmt->bindValue(':prix_Plante', $aData['prix_Plante'], \PDO::PARAM_LOB);
+        $oStmt->bindValue(':qnty_Plante', $aData['qnty_Plante'], \PDO::PARAM_LOB);
+        $oStmt->bindValue(':nomCommun_Plante', $aData['nomCommun_Plante'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':hauteurCM_Plante', $aData['hauteurCM_Plante'], \PDO::PARAM_INT);
+        $oStmt->bindValue(':feuillage_Plante', $aData['feuillage_Plante'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':arrosage_Plante', $aData['arrosage_Plante'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':floraison_Plante', $aData['floraison_Plante'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':floraisonParfume_Plante', $aData['floraisonParfume_Plante'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':modeVie_Plante', $aData['modeVie_Plante'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':resistanceFroid_Plante', $aData['resistanceFroid_Plante'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':resistanceFroidBas_Plante', $aData['resistanceFroidBas_Plante'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':resistanceFroidHaut_Plante', $aData['resistanceFroidHaut_Plante'], \PDO::PARAM_STR);
+        $oStmt->bindValue(':idCategorie', $aData['idCategorie'], \PDO::PARAM_STR);
         return $oStmt->execute();
     }
 }

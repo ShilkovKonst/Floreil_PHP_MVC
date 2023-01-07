@@ -12,8 +12,8 @@ class Shop
 
     protected $oUtil;
     protected $oModel;
-    private $_iIdCategorie;
-    private $_iIdPlante;
+    private $_iId;
+    private $_iIdSup;
 
     public function __construct()
     {
@@ -29,8 +29,8 @@ class Shop
         $this->oModel = new \Floreil_PHP_MVC\Model\Shop;
 
         /** Récupère l'identifiant de publication dans le constructeur afin d'éviter la duplication du même code **/
-        $this->_iIdCategorie = (int) (!empty($_GET['idcat']) ? $_GET['idcat'] : 0);
-        $this->_iIdPlante = (int) (!empty($_GET['idplante']) ? $_GET['idplante'] : 0);
+        $this->_iId = (int) (!empty($_GET['id']) ? $_GET['id'] : 0);
+        $this->_iIdSup = (int) (!empty($_GET['idsup']) ? $_GET['idsup'] : 0);
     }
 
     /* ================ ACTIONS AVEC VUS ================ */
@@ -52,39 +52,58 @@ class Shop
 
     // On obtient tous les plantes par categories puis on affiche la page categorie.php
     public function plantesCat()
-	{
-		$this->oUtil->oPlantes = $this->oModel->getPlantesByCategories($this->_iIdCategorie);
-
-		$this->oUtil->getView('categorie');
-	}
+    {
+        $this->oUtil->oPlantes = $this->oModel->getPlantesByCategories($this->_iId);
+        $this->oUtil->oCategorie = $this->oModel->getCategorie($this->_iId);
+        $this->oUtil->getView('categorie');
+    }
 
     // Récupère les données du plante, les commentaires associés puis affiche la page plante.php
     public function plante()
     {
-        if (empty($_GET['idPlante'])) {
+        if (empty($_GET['id'])) {
             header('Location: shop_index.html');
         }
 
-        $this->oUtil->oPlante = $this->oModel->getPlanteById($this->_iIdPlante);
+        $this->oUtil->oPlante = $this->oModel->getPlanteById($this->_iId);
         $this->oUtil->oComments = $this->oModel->getComments();
-        $getUserId = $this->oModel->getUserID(current($_SESSION));
+        $getUserID = $this->oModel->getUserID(current($_SESSION));
 
         if (isset($_POST['submit_comment'])) {
             if (empty($_POST['body_Comment'] || $_POST['title_Comment'])) {
                 $this->oUtil->sErrMsg = 'Vous n\'avez pas écrit de commentaire';
             } else {
                 $aData = array(
-                    'idUtilisateur' => $getUserId->idUtilisateur, 
-                    'title_Comment' => htmlspecialchars($_POST['title_Comment']), 
-                    'body_Comment' => htmlspecialchars($_POST['body_Comment']), 
-                    'idPlante' => $_GET['idPlante']);
+                    'title_Comment' => htmlspecialchars($_POST['title_Comment']),
+                    'body_Comment' => htmlspecialchars($_POST['body_Comment']),
+                    'idUtilisateur' => $getUserID->idUtilisateur,
+                    'idPlante' => $_GET['id']
+                );
                 $this->oModel->addComment($aData);
-        ?>
-        <script>
-            window.location.replace('shop_plante_<?= $_GET['idPlante'] ?>.html');
-        </script>
-        <?php   
+            ?>
+                <script>
+                    window.location.replace('shop_plante_<?= $_GET['id'] ?>.html');
+                </script>
+            <?php
                 $this->oUtil->sSuccMsg = 'Le Commentaire a été posté !';
+            }
+        } else if (isset($_POST['edit_comment'])) {
+            if (empty($_POST['body_Comment'] || $_POST['title_Comment'])) {
+                $this->oUtil->sErrMsg = 'Vous n\'avez rien modifié';
+            } else {
+                $aData = array(
+                    'title_Comment' => htmlspecialchars($_POST['title_Comment']),
+                    'body_Comment' => htmlspecialchars($_POST['body_Comment']),
+                    'idUtilisateur' => $getUserID->idUtilisateur,
+                    'idPlante' => $_GET['id']
+                );
+                $this->oModel->editComment($aData);
+            ?>
+                <script>
+                    window.location.replace('shop_plante_<?= $_GET['id'] ?>.html');
+                </script>
+            <?php
+                $this->oUtil->sSuccMsg = 'Le Commentaire a été modifié !';
             }
         }
 
@@ -92,41 +111,41 @@ class Shop
     }
 
     public function login()
-	{
-		if ($this->isLogged())
-			header('Location: ' . ROOT_URL . 'shop_index.html');
+    {
+        if ($this->isLogged())
+            header('Location: ' . ROOT_URL . 'shop_index.html');
 
-		if (isset($_POST['submit'])) {
-			$sEmail = htmlspecialchars(trim($_POST['email']));
-			$sPassword = htmlspecialchars(trim($_POST['password']));
-			$oIsAdmin = $this->oModel->userIsAdmin($_POST['email']);
+        if (isset($_POST['submit'])) {
+            $sEmail = htmlspecialchars(trim($_POST['email']));
+            $sPassword = htmlspecialchars(trim($_POST['password']));
+            $oIsAdmin = $this->oModel->userIsAdmin($_POST['email']);
 
-			if (empty($sEmail) || empty($sPassword)) {
-				$this->oUtil->sErrMsg = "Tous les champs n'ont pas été remplis !";
-			} elseif ($this->oModel->login($sEmail, $sPassword) == 0) {
-				$this->oUtil->sErrMsg = "Identifiant ou mot de passe incorrect!";
-			} else {
-				if ($oIsAdmin->isAdmin_Utilisateur != null) {
-					$_SESSION['is_admin'] = $oIsAdmin->username_Utilisateur; // Admin est connecté maintenant
-					header('Location: ' . ROOT_URL . 'shop_index.html');
-					exit;
-				} else {
-					$_SESSION['is_user'] = $oIsAdmin->username_Utilisateur; // user est connecté maintenant
-					header('Location: ' . ROOT_URL . 'shop_index.html');
-					exit;
-				}
-			}
-		}
+            if (empty($sEmail) || empty($sPassword)) {
+                $this->oUtil->sErrMsg = "Tous les champs n'ont pas été remplis !";
+            } elseif ($this->oModel->login($sEmail, $sPassword) == 0) {
+                $this->oUtil->sErrMsg = "Identifiant ou mot de passe incorrect!";
+            } else {
+                if ($oIsAdmin->isAdmin_Utilisateur != null) {
+                    $_SESSION['is_admin'] = $oIsAdmin->username_Utilisateur; // Admin est connecté maintenant
+                    header('Location: ' . ROOT_URL . 'shop_index.html');
+                    exit;
+                } else {
+                    $_SESSION['is_user'] = $oIsAdmin->username_Utilisateur; // user est connecté maintenant
+                    header('Location: ' . ROOT_URL . 'shop_index.html');
+                    exit;
+                }
+            }
+        }
 
-		$this->oUtil->getView('login');
-	}
+        $this->oUtil->getView('login');
+    }
 
     public function registration()
-	{
-		if ($this->isLogged())
-			header('Location: shop_index.html');
+    {
+        if ($this->isLogged())
+            header('Location: shop_index.html');
 
-		if (isset($_POST['submit'])) {
+        if (isset($_POST['submit'])) {
             $sSurname = htmlspecialchars(trim($_POST['surname']));
             $sName = htmlspecialchars(trim($_POST['name']));
             $sTelMob = htmlspecialchars(trim($_POST['telMob']));
@@ -137,79 +156,78 @@ class Shop
             $sCountryAdresse = htmlspecialchars(trim($_POST['countryAdresse']));
             $sUsername = htmlspecialchars(trim($_POST['username']));
             $sEmail = htmlspecialchars(trim($_POST['email']));
-			$sPassword = htmlspecialchars(trim($_POST['password']));
-			$sPassword_again = htmlspecialchars(trim($_POST['password_again']));
+            $sPassword = htmlspecialchars(trim($_POST['password']));
+            $sPassword_again = htmlspecialchars(trim($_POST['password_again']));
 
-			if (empty($sPassword) || empty($sPassword_again)) {
-				$this->oUtil->sErrMsg = "Tous les champs n'ont pas été remplis";
-			} elseif ($sPassword != $sPassword_again) {
-				$this->oUtil->sErrMsg = "Les mots de passe sont différents";
-			} elseif ($this->oModel->emailTaken($sEmail)) {
-				$this->oUtil->sErrMsg = "Cette adresse email est déjà utilisée";
-			} elseif ($this->oModel->usernameTaken($sUsername)) {
-				$this->oUtil->sErrMsg = "Ce pseudo est déjà utilisé";
-			} else {
-				$aData = array(
-                    'surname' => $sSurname, 
-                    'name' => $sName, 
-                    'telMob' => $sTelMob, 
-                    'houseAdresse' => $sHouseAdresse, 
-                    'streetAdresse' => $sStreetAdresse, 
-                    'ZIPAdresse' => $sZIPAdresse, 
-                    'cityAdresse' => $sCityAdresse, 
-                    'countryAdresse' => $sCountryAdresse, 
-                    'email' => $sEmail, 
-                    'username' => $sUsername, 
+            if (empty($sPassword) || empty($sPassword_again)) {
+                $this->oUtil->sErrMsg = "Tous les champs n'ont pas été remplis";
+            } elseif ($sPassword != $sPassword_again) {
+                $this->oUtil->sErrMsg = "Les mots de passe sont différents";
+            } elseif ($this->oModel->emailTaken($sEmail)) {
+                $this->oUtil->sErrMsg = "Cette adresse email est déjà utilisée";
+            } elseif ($this->oModel->usernameTaken($sUsername)) {
+                $this->oUtil->sErrMsg = "Ce pseudo est déjà utilisé";
+            } else {
+                $aData = array(
+                    'surname' => $sSurname,
+                    'name' => $sName,
+                    'telMob' => $sTelMob,
+                    'houseAdresse' => $sHouseAdresse,
+                    'streetAdresse' => $sStreetAdresse,
+                    'ZIPAdresse' => $sZIPAdresse,
+                    'cityAdresse' => $sCityAdresse,
+                    'countryAdresse' => $sCountryAdresse,
+                    'email' => $sEmail,
+                    'username' => $sUsername,
                     'password' => sha1($sPassword)      //encryption de mdp
-                );				
-				$this->oModel->addUser($aData);
-?>
+                );
+                $this->oModel->addUser($aData);
+            ?>
 
-<script>
-    window.location.replace('shop_login.html');
-</script>
+                <script>
+                    window.location.replace('shop_login.html');
+                </script>
 
-<?php 
+<?php
                 $this->oUtil->sSuccMsg = 'Votre compte a été créé, vous pouvez maintenant vous connecter';
-			}
-		}
-		$this->oUtil->getView('registration');
-	}
+            }
+        }
+        $this->oUtil->getView('registration');
+    }
 
     public function legalNotice()
-	{
-		$this->oUtil->getView('legalNotice');
-	}
+    {
+        $this->oUtil->getView('legalNotice');
+    }
 
     /* ================ ACTIONS SANS VUS ================ */
 
-	// si admin est connecté return true
-	protected function isLogged()
-	{
-		return !empty($_SESSION['is_admin']);
-	}
+    // si admin est connecté return true
+    protected function isLogged()
+    {
+        return !empty($_SESSION['is_admin']);
+    }
 
     // si user est connecté return true
-	protected function userIsLogged()
-	{
-		return !empty($_SESSION['is_user']);
-	}
+    protected function userIsLogged()
+    {
+        return !empty($_SESSION['is_user']);
+    }
 
     // Si il y a une session, la détruit pour déconnecter l'admin
-	public function logout()
-	{
-		if (!$this->isLogged())
-			header('Location: shop_index.html');
+    public function logout()
+    {
+        if (!$this->isLogged())
+            header('Location: shop_index.html');
 
-		if (!empty($_SESSION)) {
-			$_SESSION = array();
-			session_unset();
-			session_destroy();
-		}
+        if (!empty($_SESSION)) {
+            $_SESSION = array();
+            session_unset();
+            session_destroy();
+        }
 
-		// Redirection à la page d'accueil
-		header('Location: ' . ROOT_URL);
-		exit;
-	}
-
+        // Redirection à la page d'accueil
+        header('Location: ' . ROOT_URL);
+        exit;
+    }
 }
