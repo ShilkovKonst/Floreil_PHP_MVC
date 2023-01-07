@@ -41,21 +41,21 @@ class Admin extends Shop
                 $this->oModel = new \Floreil_PHP_MVC\Model\Admin;
 
                 $aData = array(
-                    'idPlante' => $_GET['id'],
-                    'title_Plante' => $_POST['title_Plante'],
-                    'description_Plante' => $_POST['description_Plante'],
-                    'prix_Plante' => $_POST['prix_Plante'],
-                    'qnty_Plante' => $_POST['qnty_Plante'],
-                    'nomCommun_Plante' => $_POST['nomCommun_Plante'],
-                    'hauteurCM_Plante' => $_POST['hauteurCM_Plante'],
-                    'feuillage_Plante' => $_POST['feuillage_Plante'],
-                    'arrosage_Plante' => $_POST['arrosage_Plante'],
-                    'floraison_Plante' => $_POST['floraison_Plante'],
-                    'modeVie_Plante' => $_POST['modeVie_Plante'],
-                    'resistanceFroid_Plante' => $_POST['resistanceFroid_Plante'],
-                    'resistanceFroidBas_Plante' => $_POST['resistanceFroidBas_Plante'],
-                    'resistanceFroidHaut_Plante' => $_POST['resistanceFroidHaut_Plante'],
-                    'idCategorie' => $_POST['idCategorie'],
+                    'idPlante'                      => $_GET['id'],
+                    'title_Plante'                  => $_POST['title_Plante'],
+                    'description_Plante'            => $_POST['description_Plante'],
+                    'prix_Plante'                   => $_POST['prix_Plante'],
+                    'qnty_Plante'                   => $_POST['qnty_Plante'],
+                    'nomCommun_Plante'              => $_POST['nomCommun_Plante'],
+                    'hauteurCM_Plante'              => $_POST['hauteurCM_Plante'],
+                    'feuillage_Plante'              => $_POST['feuillage_Plante'],
+                    'arrosage_Plante'               => $_POST['arrosage_Plante'],
+                    'floraison_Plante'              => $_POST['floraison_Plante'],
+                    'modeVie_Plante'                => $_POST['modeVie_Plante'],
+                    'resistanceFroid_Plante'        => $_POST['resistanceFroid_Plante'],
+                    'resistanceFroidBas_Plante'     => $_POST['resistanceFroidBas_Plante'],
+                    'resistanceFroidHaut_Plante'    => $_POST['resistanceFroidHaut_Plante'],
+                    'idCategorie'                   => $_POST['idCategorie'],
                 );
                 $this->oModel->updatePlante($aData);
 
@@ -106,20 +106,20 @@ class Admin extends Shop
                 $this->oModel = new \Floreil_PHP_MVC\Model\Admin;
 
                 $aData = array(
-                    'idCategorie' => $_POST['idCategorie'],
-                    'title_Plante' => $_POST['title_Plante'],
-                    'description_Plante' => $_POST['description_Plante'],
-                    'prix_Plante' => $_POST['prix_Plante'],
-                    'qnty_Plante' => $_POST['qnty_Plante'],
-                    'nomCommun_Plante' => $_POST['nomCommun_Plante'],
-                    'hauteurCM_Plante' => $_POST['hauteurCM_Plante'],
-                    'feuillage_Plante' => $_POST['feuillage_Plante'],
-                    'arrosage_Plante' => $_POST['arrosage_Plante'],
-                    'floraison_Plante' => $_POST['floraison_Plante'],
-                    'modeVie_Plante' => $_POST['modeVie_Plante'],
-                    'resistanceFroid_Plante' => $_POST['resistanceFroid_Plante'],
-                    'resistanceFroidBas_Plante' => $_POST['resistanceFroidBas_Plante'],
-                    'resistanceFroidHaut_Plante' => $_POST['resistanceFroidHaut_Plante']
+                    'idCategorie'                   => $_POST['idCategorie'],
+                    'title_Plante'                  => $_POST['title_Plante'],
+                    'description_Plante'            => $_POST['description_Plante'],
+                    'prix_Plante'                   => $_POST['prix_Plante'],
+                    'qnty_Plante'                   => $_POST['qnty_Plante'],
+                    'nomCommun_Plante'              => $_POST['nomCommun_Plante'],
+                    'hauteurCM_Plante'              => $_POST['hauteurCM_Plante'],
+                    'feuillage_Plante'              => $_POST['feuillage_Plante'],
+                    'arrosage_Plante'               => $_POST['arrosage_Plante'],
+                    'floraison_Plante'              => $_POST['floraison_Plante'],
+                    'modeVie_Plante'                => $_POST['modeVie_Plante'],
+                    'resistanceFroid_Plante'        => $_POST['resistanceFroid_Plante'],
+                    'resistanceFroidBas_Plante'     => $_POST['resistanceFroidBas_Plante'],
+                    'resistanceFroidHaut_Plante'    => $_POST['resistanceFroidHaut_Plante']
                 );
                 $this->oModel->addPlante($aData);
 
