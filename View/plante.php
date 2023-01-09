@@ -12,7 +12,7 @@
                     <time datetime="<?= $this->oPlante->createdDate_Plante ?>" pubdate="pubdate"></time>
 
                     <h1><?= htmlspecialchars($this->oPlante->title_Plante) ?></h1>
-                    <img class="col l6 m4 s12" src="<?= ROOT_URL ?>static/img/posts/product-images/<?= $this->oPlante->image_Plante ?>" alt="<?= $this->oPlante->title_Plante ?>">
+                    <img class="col l6 m4 s12" src="<?= ROOT_URL ?>static/img/plantes/<?= $this->oPlante->image_Plante ?>" alt="<?= $this->oPlante->title_Plante ?>">
                     <div class="col l6 m8 s12">
                         <p><?= nl2br($this->oPlante->description_Plante) ?></p>
                         <p><strong>Nom Commun: </strong><?= nl2br($this->oPlante->nomCommun_Plante) ?></p>
@@ -28,6 +28,23 @@
                         <p><strong>Quantité: </strong><?= nl2br($this->oPlante->qnty_Plante) ?></p>
                     </div>
                 </article>
+                <form method="post">
+                    <div class="row">
+                        <div class="input-field col m4 s12">
+                            <label for="qnty_plantePanier">Ajouter</label>
+                            <br>
+                            <br>
+                            <input type="range" value="0" step="1" min="0" max="<?= $this->oPlante->qnty_Plante ?>" name="qnty_plantePanier" id="qnty_plantePanier" class="materialize-textarea">
+                        </div>
+                    </div>
+                    <button type="submit" name="submit_ajouter" class="btn light-blue waves-effect waves-light">
+                        Ajouter au panier
+                    </button>
+                    <button type="submit" name="submit_effacer" class="btn red waves-effect waves-light">
+                        Effacer du panier
+                    </button>
+                </form>
+
                 <hr>
                 <p><em>Posté le <?= date('d/m/Y à H:i', strtotime($this->oPlante->createdDate_Plante)); ?></em></p>
                 <br>

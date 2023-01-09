@@ -64,11 +64,51 @@ class Shop
         if (empty($_GET['id'])) {
             header('Location: shop_index.html');
         }
-
+        //__Montrer les plantes__//
         $this->oUtil->oPlante = $this->oModel->getPlanteById($this->_iId);
         $this->oUtil->oComments = $this->oModel->getComments();
         $getUserID = $this->oModel->getUserID(current($_SESSION));
+        $plante = $this->oModel->getPlanteById($this->_iId);
+        $plantePanier = $this->oModel->getSpecificPlantePanierByUserID($getUserID->idUtilisateur, $this->_iId);
 
+        //__Ajouter une plante dans le panier/modifier quantité d'une plante dans la panier__//
+        if (isset($_POST['submit_ajouter'])) {
+            if (empty($_POST['qnty_plantePanier'])) {
+                $this->oUtil->sErrMsg = 'Vous n\'avez pas choisi le quantité';
+            } else {
+                if ($plantePanier == null) {
+                    $aData = array(
+                        'title_PlantePanier' => $plante->title_Plante,
+                        'image_PlantePanier' => $plante->image_Plante,
+                        'idUtilisateur' => $getUserID->idUtilisateur,
+                        'idPlante' => $this->_iId,
+                        'qnty_plantePanier' => $_POST['qnty_plantePanier'],
+                        'qnty_planteStock' => $plante->qnty_Plante,
+                        'prixPourQnty_plante' => ($plante->prix_Plante * $_POST['qnty_plantePanier'])
+                    );
+                } else {
+                    $aData = array(
+                        'idUtilisateur' => $getUserID->idUtilisateur,
+                        'idPlante' => $this->_iId,
+                        'qnty_Plante' => $_POST['qnty_plantePanier'],
+                        'prixPourQnty_plante' => ($plante->prix_Plante * $_POST['qnty_plantePanier'])
+                    );
+                }
+            }
+            if ($plantePanier == null) {
+                $this->oModel->addPanierPlante($aData);
+            } else {
+                $this->oModel->changePanierPlante($aData);
+            }
+?>
+            <script>
+                window.location.replace('shop_plante_<?= $_GET['id'] ?>.html');
+            </script>
+            <?php
+            $this->oUtil->sSuccMsg = 'La plante a été ajouté dans le panier !';
+        }
+
+        //__Ajouter/editer une commentaire__//
         if (isset($_POST['submit_comment'])) {
             if (empty($_POST['body_Comment'] || $_POST['title_Comment'])) {
                 $this->oUtil->sErrMsg = 'Vous n\'avez pas écrit de commentaire';
@@ -106,8 +146,57 @@ class Shop
                 $this->oUtil->sSuccMsg = 'Le Commentaire a été modifié !';
             }
         }
-
         $this->oUtil->getView('plante');
+    }
+
+    public function panier()
+    {
+        $getUserID = $this->oModel->getUserID(current($_SESSION));
+        $oPlantesPanier = $this->oModel->getAllPlantesPanierByUserID($getUserID->idUtilisateur);
+        $oTotalPrixPanier = $this->oModel->getTotalSumPanier($getUserID->idUtilisateur);
+        $this->oUtil->oPlantesPanier = $this->oModel->getAllPlantesPanierByUserID($getUserID->idUtilisateur);
+        $this->oUtil->oTotalPrixPanier = $this->oModel->getTotalSumPanier($getUserID->idUtilisateur);
+        $this->oUtil->getView('panier');
+
+        if (isset($_POST['submit_viderPanier'])) {
+            $this->oModel->deleteAllPanierPlantes($getUserID->idUtilisateur);
+            ?>
+            <script>
+                window.location.replace('shop_panier.html');
+            </script>
+        <?php
+        }
+
+        if (isset($_POST['submit_validerAchat'])) {
+            foreach ($oPlantesPanier as $plantePanier) {
+                $aData = array(
+                    'idPlante' => $plantePanier->idPlante,
+                    'qnty_Plante' => $this->oModel->getPlanteById($plantePanier->idPlante)->qnty_Plante - $plantePanier->qnty_plantePanier
+                );
+                $this->oModel->updateQntyPlante($aData);
+            }
+            $this->oModel->deleteAllPanierPlantes($getUserID->idUtilisateur);
+            $aData = array(
+                'numero_Facture' => $getUserID->idUtilisateur . $oTotalPrixPanier,
+                'montantPanier_Facture' => $oTotalPrixPanier,
+                'document_Facture' => $getUserID->idUtilisateur . $oTotalPrixPanier,
+                'idUtilisateur' => $getUserID->idUtilisateur
+            );
+            $this->oModel->createFacture($aData);
+        ?>
+            <script>
+                window.location.replace('shop_panier.html');
+            </script>
+            <?php
+        }
+    }
+
+    public function supprimerPlantePanier()
+    {
+        $getUserID = $this->oModel->getUserID(current($_SESSION));
+        $this->oUtil->oPlantesPanier = $this->oModel->getAllPlantesPanierByUserID($getUserID->idUtilisateur);
+
+        $this->oUtil->getView('panier');
     }
 
     public function login()

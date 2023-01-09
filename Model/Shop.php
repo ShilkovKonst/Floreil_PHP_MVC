@@ -22,7 +22,7 @@ class Shop
   public function getCategorie($iIdCat)
   {
     $oStmt = $this->oDb->prepare('SELECT * FROM Categories WHERE idCategorie = :idCat');
-    $oStmt->bindValue(':idCat', $iIdCat, \PDO::PARAM_INT);
+    $oStmt->bindParam(':idCat', $iIdCat, \PDO::PARAM_INT);
     $oStmt->execute();
     return $oStmt->fetchAll(\PDO::FETCH_OBJ);
   }
@@ -30,7 +30,7 @@ class Shop
   public function getPlantesByCategories($iIdCat)
   {
     $oStmt = $this->oDb->prepare('SELECT * FROM Plantes WHERE idCategorie = :idCat');
-    $oStmt->bindValue(':idCat', $iIdCat, \PDO::PARAM_INT);
+    $oStmt->bindParam(':idCat', $iIdCat, \PDO::PARAM_INT);
     $oStmt->execute();
     return $oStmt->fetchAll(\PDO::FETCH_OBJ);
   }
@@ -49,7 +49,7 @@ class Shop
   public function getPlanteById($iPlanteId)
   {
     $oStmt = $this->oDb->prepare('SELECT * FROM Plantes WHERE idPlante = :planteId LIMIT 1');
-    $oStmt->bindValue(':planteId', $iPlanteId, \PDO::PARAM_INT);
+    $oStmt->bindParam(':planteId', $iPlanteId, \PDO::PARAM_INT);
     $oStmt->execute();
     return $oStmt->fetch(\PDO::FETCH_OBJ);
   }
@@ -61,10 +61,38 @@ class Shop
     return $oStmt->fetchAll(\PDO::FETCH_OBJ);
   }
 
+  public function getAllPlantesPanierByUserID($iUserID)
+  {
+    $oStmt = $this->oDb->prepare('SELECT * FROM ajouter_au_panier WHERE idUtilisateur = :idUtilisateur');
+    $oStmt->bindParam(':idUtilisateur', $iUserID, \PDO::PARAM_INT);
+    $oStmt->execute();
+    return $oStmt->fetchAll(\PDO::FETCH_OBJ);
+  }
+
+  public function getTotalSumPanier($iUserID)
+  {
+    $totalPrix = 0;
+    $oStmt = $this->oDb->prepare('SELECT prixPourQnty_plante FROM ajouter_au_panier WHERE idUtilisateur = :idUtilisateur');
+    $oStmt->bindParam(':idUtilisateur', $iUserID, \PDO::PARAM_INT);
+    $oStmt->execute();
+    foreach ($oStmt->fetchAll(\PDO::FETCH_OBJ) as $prix)
+      $totalPrix += $prix->prixPourQnty_plante;
+    return $totalPrix;
+  }
+
+  public function getSpecificPlantePanierByUserID($iUserID, $iPlanteID)
+  {
+    $oStmt = $this->oDb->prepare('SELECT * FROM ajouter_au_panier WHERE idUtilisateur = :idUtilisateur AND idPlante = :idPlante');
+    $oStmt->bindParam(':idUtilisateur', $iUserID, \PDO::PARAM_INT);
+    $oStmt->bindParam(':idPlante', $iPlanteID, \PDO::PARAM_INT);
+    $oStmt->execute();
+    return $oStmt->fetchAll(\PDO::FETCH_OBJ);
+  }
+
   public function userIsAdmin($sEmail)
   {
     $oStmt = $this->oDb->prepare('SELECT * FROM Utilisateurs WHERE email_Utilisateur = :email LIMIT 1');
-    $oStmt->bindValue(':email', $sEmail, \PDO::PARAM_STR);
+    $oStmt->bindParam(':email', $sEmail, \PDO::PARAM_STR);
     $oStmt->execute();
     return $oStmt->fetch(\PDO::FETCH_OBJ);
   }
@@ -80,10 +108,10 @@ class Shop
     return $oStmt->rowCount();
   }
 
-  public function usernameTaken($username)
+  public function usernameTaken($sUsername)
   {
     $oStmt = $this->oDb->prepare('SELECT * FROM Utilisateurs WHERE username_Utilisateur = :username');
-    $oStmt->bindParam(':username', $username, \PDO::PARAM_STR);
+    $oStmt->bindParam(':username', $sUsername, \PDO::PARAM_STR);
     $oStmt->execute();
     return $oStmt->rowCount();
   }
@@ -121,7 +149,7 @@ class Shop
     WHERE poster_comment.idPlante = :idPlante
     ORDER BY poster_comment.date_Comment DESC
        ");
-    $oStmt->bindValue(':idPlante', $_GET['id'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':idPlante', $_GET['id'], \PDO::PARAM_INT);
     $oStmt->execute();
     return $oStmt->fetchAll(\PDO::FETCH_OBJ);
   }
@@ -165,11 +193,44 @@ class Shop
     poster_comment (idUtilisateur, title_Comment, body_Comment, idPlante) 
     VALUES
     (:idUtilisateur, :title_Comment, :body_Comment, :idPlante)');
-    $oStmt->bindValue(':idUtilisateur', $aData['idUtilisateur'], \PDO::PARAM_INT);
-    $oStmt->bindValue(':title_Comment', $aData['title_Comment'], \PDO::PARAM_STR);
-    $oStmt->bindValue(':body_Comment', $aData['body_Comment'], \PDO::PARAM_STR);
-    $oStmt->bindValue(':idPlante', $aData['idPlante'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':idUtilisateur', $aData['idUtilisateur'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':title_Comment', $aData['title_Comment'], \PDO::PARAM_STR);
+    $oStmt->bindParam(':body_Comment', $aData['body_Comment'], \PDO::PARAM_STR);
+    $oStmt->bindParam(':idPlante', $aData['idPlante'], \PDO::PARAM_INT);
     return $oStmt->execute();
+  }
+
+  public function addPanierPlante(array $aData)
+  {
+    $oStmt = $this->oDb->prepare('
+    INSERT INTO
+        ajouter_au_panier (idPlante, idUtilisateur, title_PlantePanier, image_PlantePanier, qnty_plantePanier, qnty_planteStock, prixPourQnty_plante)
+    VALUES     
+      (:idPlante, :idUtilisateur, :title_PlantePanier, :image_PlantePanier, :qnty_plantePanier, :qnty_planteStock, :prixPourQnty_plante)');
+    $oStmt->bindParam(':idUtilisateur', $aData['idUtilisateur'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':idPlante', $aData['idPlante'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':title_PlantePanier', $aData['title_PlantePanier'], \PDO::PARAM_STR);
+    $oStmt->bindParam(':image_PlantePanier', $aData['image_PlantePanier'], \PDO::PARAM_STR);
+    $oStmt->bindParam(':qnty_plantePanier', $aData['qnty_plantePanier'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':qnty_planteStock', $aData['qnty_planteStock'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':prixPourQnty_plante', $aData['prixPourQnty_plante'], \PDO::PARAM_INT);
+    $oStmt->execute();
+    return $oStmt->fetchAll(\PDO::FETCH_OBJ);
+  }
+
+  public function createFacture(array $aData)
+  {
+    $oStmt = $this->oDb->prepare('
+    INSERT INTO
+    facture (numero_Facture, montantPanier_Facture, document_Facture, idUtilisateur)
+    VALUES     
+      (:numero_Facture, :montantPanier_Facture, :document_Facture, :idUtilisateur)');
+    $oStmt->bindParam(':numero_Facture', $aData['numero_Facture'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':montantPanier_Facture', $aData['montantPanier_Facture'], \PDO::PARAM_STR);
+    $oStmt->bindParam(':document_Facture', $aData['document_Facture'], \PDO::PARAM_STR);
+    $oStmt->bindParam(':idUtilisateur', $aData['idUtilisateur'], \PDO::PARAM_INT);
+    $oStmt->execute();
+    return $oStmt->fetchAll(\PDO::FETCH_OBJ);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -187,21 +248,72 @@ class Shop
         idUtilisateur = :idUtilisateur 
       AND
         idPlante = :idPlante');
-    $oStmt->bindValue(':idUtilisateur', $aData['idUtilisateur'], \PDO::PARAM_INT);
-    $oStmt->bindValue(':title_Comment', $aData['title_Comment'], \PDO::PARAM_STR);
-    $oStmt->bindValue(':body_Comment', $aData['body_Comment'], \PDO::PARAM_STR);
-    $oStmt->bindValue(':idPlante', $aData['idPlante'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':idUtilisateur', $aData['idUtilisateur'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':title_Comment', $aData['title_Comment'], \PDO::PARAM_STR);
+    $oStmt->bindParam(':body_Comment', $aData['body_Comment'], \PDO::PARAM_STR);
+    $oStmt->bindParam(':idPlante', $aData['idPlante'], \PDO::PARAM_INT);
     return $oStmt->execute();
   }
+
+  public function updateQntyPlante(array $aData)
+  {
+    $oStmt = $this->oDb->prepare('
+    UPDATE 
+        Plantes 
+    SET 
+        qnty_Plante = :qnty_Plante
+    WHERE 
+        idPlante = :idPlante 
+    LIMIT 1');
+    $oStmt->bindParam(':qnty_Plante', $aData['qnty_Plante'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':idPlante', $aData['idPlante'], \PDO::PARAM_INT);
+    return $oStmt->execute();
+  }
+
+  public function changePanierPlante(array $aData)
+  {
+    $oStmt = $this->oDb->prepare('
+    UPDATE 
+        ajouter_au_panier 
+    SET     
+        qnty_plantePanier = :qnty_plantePanier,
+        prixPourQnty_plante = :prixPourQnty_plante
+    WHERE 
+        idUtilisateur = :idUtilisateur 
+      AND
+        idPlante = :idPlante');
+    $oStmt->bindParam(':idUtilisateur', $aData['idUtilisateur'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':idPlante', $aData['idPlante'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':qnty_plantePanier', $aData['qnty_plantePanier'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':prixPourQnty_plante', $aData['prixPourQnty_plante'], \PDO::PARAM_INT);
+    $oStmt->execute();
+    return $oStmt->fetchAll(\PDO::FETCH_OBJ);
+  }
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   ////////////////////////////_____DELETE_____//////////////////////////////////////////////////////////////////////////////////
 
-  public function deleteUser($aData)
+  public function deleteUser(array $aData)
   {
     $oStmt = $this->oDb->prepare('DELETE FROM Utilisateurs WHERE email_Utilisateur = :email AND password_Utilisateur = :password');
     $oStmt->bindParam(':email', $aData['userEmail'], \PDO::PARAM_STR);
     $oStmt->bindParam(':password', $aData['userPassword'], \PDO::PARAM_STR);
+    return $oStmt->execute();
+  }
+
+  public function deletePanierPlante(array $aData)
+  {
+    $oStmt = $this->oDb->prepare('DELETE FROM ajouter_au_panier WHERE idPlante = :idPlante AND idUtilisateur = :idUtilisateur LIMIT 1');
+    $oStmt->bindParam(':idUtilisateur', $aData['idUtilisateur'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':idPlante', $aData['idPlante'], \PDO::PARAM_INT);
+    return $oStmt->execute();
+  }
+
+  public function deleteAllPanierPlantes($userID)
+  {
+    $oStmt = $this->oDb->prepare('DELETE FROM ajouter_au_panier WHERE idUtilisateur = :idUtilisateur');
+    $oStmt->bindParam(':idUtilisateur', $userID, \PDO::PARAM_INT);
     return $oStmt->execute();
   }
 
