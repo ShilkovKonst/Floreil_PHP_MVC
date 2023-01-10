@@ -48,19 +48,19 @@
               <input type="text" name="paysAdresse_Utilisateur" id="paysAdresse_Utilisateur">
               <label for="paysAdresse_Utilisateur">Pays</label>
             </div>
-            <div class="input-field col m4 s12">
+            <div class="input-field col m2 s12">
               <input type="text" name="codePostaleAdresse_Utilisateur" id="codePostaleAdresse_Utilisateur">
               <label for="codePostaleAdresse_Utilisateur">Code postale</label>
             </div>
-            <div class="input-field col m8 s12">
+            <div class="input-field col m4 s12">
               <input type="text" name="villeAdresse_Utilisateur" id="villeAdresse_Utilisateur">
               <label for="villeAdresse_Utilisateur">Ville</label>
             </div>
-            <div class="input-field col m3 s12">
+            <div class="input-field col m2 s12">
               <input type="text" name="batimentAdresse_Utilisateur" id="batimentAdresse_Utilisateur">
-              <label for="batimentAdresse_Utilisateur">Numero de batiment</label>
+              <label for="batimentAdresse_Utilisateur">Numero du bat</label>
             </div>
-            <div class="input-field col m9 s12">
+            <div class="input-field col m4 s12">
               <input type="text" name="rueAdresse_Utilisateur" id="rueAdresse_Utilisateur">
               <label for="rueAdresse_Utilisateur">Rue</label>
             </div>

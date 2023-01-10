@@ -1,14 +1,26 @@
 .cart-indicator {
-    position: relative;
-  }
+  position: relative;
+}
 
 .cart-indicator::before {
-    content: '';
-    position: absolute;
-    top: 15px;
-    right: 5px;
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    border-radius: 50%;
-  }
+  content: '';
+  position: absolute;
+  top: 15px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+}
+
+#header {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+
+#footer {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 10;
+}
