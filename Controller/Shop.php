@@ -125,7 +125,7 @@ class Shop
                 $this->oModel->deletePanierPlante($aData);
             ?>
                 <script>
-                    window.location.replace('shop_plante_<?= $_GET['id'] ?>.html');
+                    window.location.replace('shop_plante_<?= $this->_iId ?>.html');
                 </script>
                 <?php
             }
@@ -144,7 +144,7 @@ class Shop
                     $this->oModel->addComment($aData);
                 ?>
                     <script>
-                        window.location.replace('shop_plante_<?= $_GET['id'] ?>.html');
+                        window.location.replace('shop_plante_<?= $this->_iId ?>.html');
                     </script>
                 <?php
                     $this->oUtil->sSuccMsg = 'Le Commentaire a été posté !';
@@ -157,12 +157,12 @@ class Shop
                         'title_Comment' => htmlspecialchars($_POST['title_Comment']),
                         'body_Comment' => htmlspecialchars($_POST['body_Comment']),
                         'idUtilisateur' => $this->getUserID->idUtilisateur,
-                        'idPlante' => $_GET['id']
+                        'idPlante' => $this->_iId
                     );
                     $this->oModel->editComment($aData);
                 ?>
                     <script>
-                        window.location.replace('shop_plante_<?= $_GET['id'] ?>.html');
+                        window.location.replace('shop_plante_<?= $this->_iId ?>.html');
                     </script>
             <?php
                     $this->oUtil->sSuccMsg = 'Le Commentaire a été modifié !';
