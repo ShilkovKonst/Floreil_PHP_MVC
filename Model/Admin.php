@@ -74,7 +74,7 @@ class Admin extends Shop
     {
         $i = [
             'idPlante' => $this->oDb->lastInsertId(),
-            'image' => $this->oDb->lastInsertId() . $extension
+            'image' => $this->oDb->lastInsertId('image_Plante') . $extension
         ];
 
         $oStmt = $this->oDb->prepare('UPDATE Plantes SET image_Plante = :image WHERE idPlante = :idPlante');
