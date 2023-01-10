@@ -178,11 +178,22 @@ class Shop
     codePostaleAdresse_Utilisateur, villeAdresse_Utilisateur, 
     paysAdresse_Utilisateur) 
     VALUES
-    (:surname, :name, 
-    :email, :telMob, 
-    :username, :password, 
-    :houseAdresse, :streetAdresse, 
-    :ZIPAdresse, :cityAdresse, :countryAdresse)');
+    (:nom_Utilisateur, :prenom_Utilisateur, 
+    :email_Utilisateur, :telMob_Utilisateur, 
+    :username_Utilisateur, :password_Utilisateur, 
+    :batimentAdresse_Utilisateur, :rueAdresse_Utilisateur, 
+    :codePostaleAdresse_Utilisateur, :villeAdresse_Utilisateur, :paysAdresse_Utilisateur)');
+    $oStmt->bindParam(':nom_Utilisateur', $aData['nom_Utilisateur'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':prenom_Utilisateur', $aData['prenom_Utilisateur'], \PDO::PARAM_STR);
+    $oStmt->bindParam(':email_Utilisateur', $aData['email_Utilisateur'], \PDO::PARAM_STR);
+    $oStmt->bindParam(':telMob_Utilisateur', $aData['telMob_Utilisateur'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':username_Utilisateur', $aData['username_Utilisateur'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':password_Utilisateur', $aData['password_Utilisateur'], \PDO::PARAM_STR);
+    $oStmt->bindParam(':batimentAdresse_Utilisateur', $aData['batimentAdresse_Utilisateur'], \PDO::PARAM_STR);
+    $oStmt->bindParam(':rueAdresse_Utilisateur', $aData['rueAdresse_Utilisateur'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':codePostaleAdresse_Utilisateur', $aData['codePostaleAdresse_Utilisateur'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':villeAdresse_Utilisateur', $aData['villeAdresse_Utilisateur'], \PDO::PARAM_STR);
+    $oStmt->bindParam(':paysAdresse_Utilisateur', $aData['paysAdresse_Utilisateur'], \PDO::PARAM_STR);
     return $oStmt->execute($aData);
   }
 

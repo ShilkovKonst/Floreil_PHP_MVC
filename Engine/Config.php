@@ -9,7 +9,8 @@ final class Config
     DB_HOST = 'localhost',
     DB_NAME = 'floreil',
     DB_USR = 'root',
-    DB_PWD = 'Bo61636000*',
+    DB_PWD = '',
+    //DB_PWD = 'Bo61636000*',
 
     // Titre du site
     SITE_NAME = 'Floreil - magasin des plantes pour tous!';

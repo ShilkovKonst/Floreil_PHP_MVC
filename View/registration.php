@@ -17,65 +17,66 @@
         <form method="post">
           <div class="row">
             <div class="input-field col m6 s12">
-              <input type="text" name="surname" id="surname">
-              <label for="surname">Nom</label>
+              <input type="text" name="nom_Utilisateur" id="nom_Utilisateur">
+              <label for="nom_Utilisateur">Nom</label>
             </div>
             <div class="input-field col m6 s12">
-              <input type="text" name="name" id="name">
-              <label for="name">Prenom</label>
+              <input type="text" name="prenom_Utilisateur" id="prenom_Utilisateur">
+              <label for="prenom_Utilisateur">Prenom</label>
             </div>
             <div class="input-field col m6 s12">
-              <input type="email" name="email" id="email">
-              <label for="email">Adresse email</label>
+              <input type="email" name="email_Utilisateur" id="email_Utilisateur">
+              <label for="email_Utilisateur">Adresse email</label>
             </div>
             <div class="input-field col m6 s12">
-              <input type="text" name="username" id="username">
-              <label for="username">Pseudo</label>
+              <input type="text" name="username_Utilisateur" id="username_Utilisateur">
+              <label for="username_Utilisateur">Pseudo</label>
             </div>
             <div class="input-field col m6 s12">
-              <input type="password" id="password" name="password">
-              <label for="password">Mot de passe</label>
+              <input type="password" id="password_Utilisateur" name="password_Utilisateur">
+              <label for="password_Utilisateur">Mot de passe</label>
             </div>
             <div class="input-field col m6 s12">
               <input type="password" name="password_again" id="password_again">
               <label for="password_again">Répéter le mot de passe</label>
             </div>
             <div class="input-field col m6 s12">
-              <input type="text" name="telMob" id="telMob">
-              <label for="telMob">Telephone mobile</label>
+              <input type="text" name="telMob_Utilisateur" id="telMob_Utilisateur">
+              <label for="telMob_Utilisateur">Telephone mobile</label>
             </div>
             <div class="input-field col m6 s12">
-              <input type="text" name="countryAdresse" id="countryAdresse">
-              <label for="countryAdresse">Pays</label>
+              <input type="text" name="paysAdresse_Utilisateur" id="paysAdresse_Utilisateur">
+              <label for="paysAdresse_Utilisateur">Pays</label>
             </div>
             <div class="input-field col m4 s12">
-              <input type="text" name="ZIPAdresse" id="ZIPAdresse">
-              <label for="ZIPAdresse">Code postale</label>
+              <input type="text" name="codePostaleAdresse_Utilisateur" id="codePostaleAdresse_Utilisateur">
+              <label for="codePostaleAdresse_Utilisateur">Code postale</label>
             </div>
             <div class="input-field col m8 s12">
-              <input type="text" name="cityAdresse" id="cityAdresse">
-              <label for="cityAdresse">Ville</label>
+              <input type="text" name="villeAdresse_Utilisateur" id="villeAdresse_Utilisateur">
+              <label for="villeAdresse_Utilisateur">Ville</label>
             </div>
             <div class="input-field col m3 s12">
-              <input type="text" name="houseAdresse" id="houseAdresse">
-              <label for="houseAdresse">Numero de batiment</label>
+              <input type="text" name="batimentAdresse_Utilisateur" id="batimentAdresse_Utilisateur">
+              <label for="batimentAdresse_Utilisateur">Numero de batiment</label>
             </div>
             <div class="input-field col m9 s12">
-              <input type="text" name="streetAdresse" id="streetAdresse">
-              <label for="streetAdresse">Rue</label>
-            </div>    
+              <input type="text" name="rueAdresse_Utilisateur" id="rueAdresse_Utilisateur">
+              <label for="rueAdresse_Utilisateur">Rue</label>
+            </div>
           </div>
+          <center>
+            <button type="submit" name="submit_registration" class="btn waves-effect waves-light light-blue">
+              <i class="material-icons left">perm_identity</i>
+              Inscription
+            </button>
+          </center>
         </form>
       </div>
     </div>
   </div>
 </div>
-<center>
-  <button type="submit" name="submit" class="btn waves-effect waves-light light-blue">
-    <i class="material-icons left">perm_identity</i>
-    Inscription
-  </button>
-</center>
+
 </div>
 
 </div>

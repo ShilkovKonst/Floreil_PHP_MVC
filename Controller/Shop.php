@@ -35,7 +35,7 @@ class Shop
         //$this->_iIdSup = (int) (!empty($_GET['idsup']) ? $_GET['idsup'] : 0);
 
         if (!empty($_SESSION['is_user']))
-        $this->getUserID = $this->oModel->getUserID(current($_SESSION));
+            $this->getUserID = $this->oModel->getUserID(current($_SESSION));
     }
 
     /* ================ ACTIONS AVEC VUS ================ */
@@ -76,7 +76,7 @@ class Shop
         $this->oUtil->oPlante = $this->oModel->getPlanteById($this->_iId);
         $this->oUtil->oComments = $this->oModel->getComments();
 
-        /////__Si on est utilisateur ou admin, on peut d'interagir avec bdd__/////
+        /////__Si on est utilisateur, on peut d'interagir avec bdd__/////
         if (!empty($_SESSION['is_user'])) {
 
             //$getUserID = $this->oModel->getUserID(current($_SESSION));
@@ -109,11 +109,11 @@ class Shop
                         $this->oModel->changePanierPlante($aData);
                     }
                 }
-?>
+                ?>
                 <script>
                     window.location.replace('shop_plante_<?= $_GET['id'] ?>.html');
                 </script>
-            <?php
+                <?php
                 $this->oUtil->sSuccMsg = 'La plante a été ajouté dans le panier !';
             }
 
@@ -123,7 +123,7 @@ class Shop
                     'idPlante' => $this->_iId
                 );
                 $this->oModel->deletePanierPlante($aData);
-            ?>
+                ?>
                 <script>
                     window.location.replace('shop_plante_<?= $this->_iId ?>.html');
                 </script>
@@ -142,11 +142,11 @@ class Shop
                         'idPlante' => $_GET['id']
                     );
                     $this->oModel->addComment($aData);
-                ?>
+                    ?>
                     <script>
                         window.location.replace('shop_plante_<?= $this->_iId ?>.html');
                     </script>
-                <?php
+                    <?php
                     $this->oUtil->sSuccMsg = 'Le Commentaire a été posté !';
                 }
             } else if (isset($_POST['edit_comment'])) {
@@ -160,12 +160,12 @@ class Shop
                         'idPlante' => $this->_iId
                     );
                     $this->oModel->editComment($aData);
-                ?>
-                    <script>
-                        window.location.replace('shop_plante_<?= $this->_iId ?>.html');
-                    </script>
-            <?php
-                    $this->oUtil->sSuccMsg = 'Le Commentaire a été modifié !';
+                    ?>
+                        <script>
+                            window.location.replace('shop_plante_<?= $this->_iId ?>.html');
+                        </script>
+                        <?php
+                        $this->oUtil->sSuccMsg = 'Le Commentaire a été modifié !';
                 }
             }
         }
@@ -192,7 +192,7 @@ class Shop
             <script>
                 window.location.replace('shop_panier.html');
             </script>
-        <?php
+            <?php
         }
 
         if (isset($_POST['submit_validerAchat'])) {
@@ -211,7 +211,7 @@ class Shop
                 'idUtilisateur' => $this->getUserID->idUtilisateur
             );
             $this->oModel->createFacture($aData);
-        ?>
+            ?>
             <script>
                 window.location.replace('shop_panier.html');
             </script>
@@ -262,18 +262,18 @@ class Shop
         if ($this->isLogged())
             header('Location: shop_index.html');
 
-        if (isset($_POST['submit'])) {
-            $sSurname = htmlspecialchars(trim($_POST['surname']));
-            $sName = htmlspecialchars(trim($_POST['name']));
-            $sTelMob = htmlspecialchars(trim($_POST['telMob']));
-            $sHouseAdresse = htmlspecialchars(trim($_POST['houseAdresse']));
-            $sStreetAdresse = htmlspecialchars(trim($_POST['streetAdresse']));
-            $sZIPAdresse = htmlspecialchars(trim($_POST['ZIPAdresse']));
-            $sCityAdresse = htmlspecialchars(trim($_POST['cityAdresse']));
-            $sCountryAdresse = htmlspecialchars(trim($_POST['countryAdresse']));
-            $sUsername = htmlspecialchars(trim($_POST['username']));
-            $sEmail = htmlspecialchars(trim($_POST['email']));
-            $sPassword = htmlspecialchars(trim($_POST['password']));
+        if (isset($_POST['submit_registration'])) {
+            $sSurname = htmlspecialchars(trim($_POST['nom_Utilisateur']));
+            $sName = htmlspecialchars(trim($_POST['prenom_Utilisateur']));
+            $sEmail = htmlspecialchars(trim($_POST['email_Utilisateur']));
+            $sTelMob = htmlspecialchars(trim($_POST['telMob_Utilisateur']));
+            $sUsername = htmlspecialchars(trim($_POST['username_Utilisateur']));
+            $sPassword = htmlspecialchars(trim($_POST['password_Utilisateur']));
+            $sHouseAdresse = htmlspecialchars(trim($_POST['batimentAdresse_Utilisateur']));
+            $sStreetAdresse = htmlspecialchars(trim($_POST['rueAdresse_Utilisateur']));
+            $sZIPAdresse = htmlspecialchars(trim($_POST['codePostaleAdresse_Utilisateur']));
+            $sCityAdresse = htmlspecialchars(trim($_POST['villeAdresse_Utilisateur']));
+            $sCountryAdresse = htmlspecialchars(trim($_POST['paysAdresse_Utilisateur']));
             $sPassword_again = htmlspecialchars(trim($_POST['password_again']));
 
             if (empty($sPassword) || empty($sPassword_again)) {
@@ -286,26 +286,26 @@ class Shop
                 $this->oUtil->sErrMsg = "Ce pseudo est déjà utilisé";
             } else {
                 $aData = array(
-                    'surname' => $sSurname,
-                    'name' => $sName,
-                    'telMob' => $sTelMob,
-                    'houseAdresse' => $sHouseAdresse,
-                    'streetAdresse' => $sStreetAdresse,
-                    'ZIPAdresse' => $sZIPAdresse,
-                    'cityAdresse' => $sCityAdresse,
-                    'countryAdresse' => $sCountryAdresse,
-                    'email' => $sEmail,
-                    'username' => $sUsername,
-                    'password' => sha1($sPassword)      //encryption de mdp
+                    'nom_Utilisateur' => $sSurname,
+                    'prenom_Utilisateur' => $sName,
+                    'email_Utilisateur' => $sEmail,
+                    'telMob_Utilisateur' => $sTelMob,
+                    'username_Utilisateur' => $sUsername,
+                    'password_Utilisateur' => sha1($sPassword),          //encryption de mdp
+                    'batimentAdresse_Utilisateur' => $sHouseAdresse,
+                    'rueAdresse_Utilisateur' => $sStreetAdresse,
+                    'codePostaleAdresse_Utilisateur' => $sZIPAdresse,
+                    'villeAdresse_Utilisateur' => $sCityAdresse,
+                    'paysAdresse_Utilisateur' => $sCountryAdresse
                 );
                 $this->oModel->addUser($aData);
-            ?>
+                ?>
 
                 <script>
                     window.location.replace('shop_login.html');
                 </script>
 
-<?php
+                <?php
                 $this->oUtil->sSuccMsg = 'Votre compte a été créé, vous pouvez maintenant vous connecter';
             }
         }
