@@ -8,12 +8,14 @@ if (empty($_GET['a'])) {
 
 class Shop
 {
-    const MAX_PLANTES = 3;
+    //const MAX_PLANTES = 3;
 
     protected $oUtil;
     protected $oModel;
     private $_iId;
-    private $_iIdSup;
+    //private $_iIdSup;
+
+    protected $getUserID;
 
     public function __construct()
     {
@@ -30,7 +32,10 @@ class Shop
 
         /** Récupère l'identifiant de publication dans le constructeur afin d'éviter la duplication du même code **/
         $this->_iId = (int) (!empty($_GET['id']) ? $_GET['id'] : 0);
-        $this->_iIdSup = (int) (!empty($_GET['idsup']) ? $_GET['idsup'] : 0);
+        //$this->_iIdSup = (int) (!empty($_GET['idsup']) ? $_GET['idsup'] : 0);
+
+        if (!empty($_SESSION['is_user']))
+        $this->getUserID = $this->oModel->getUserID(current($_SESSION));
     }
 
     /* ================ ACTIONS AVEC VUS ================ */
@@ -65,101 +70,124 @@ class Shop
             header('Location: shop_index.html');
         }
         //__Montrer les plantes__//
+
+        $plante = $this->oModel->getPlanteById($this->_iId);
+
         $this->oUtil->oPlante = $this->oModel->getPlanteById($this->_iId);
         $this->oUtil->oComments = $this->oModel->getComments();
-        $getUserID = $this->oModel->getUserID(current($_SESSION));
-        $plante = $this->oModel->getPlanteById($this->_iId);
-        $plantePanier = $this->oModel->getSpecificPlantePanierByUserID($getUserID->idUtilisateur, $this->_iId);
 
-        //__Ajouter une plante dans le panier/modifier quantité d'une plante dans la panier__//
-        if (isset($_POST['submit_ajouter'])) {
-            if (empty($_POST['qnty_plantePanier'])) {
-                $this->oUtil->sErrMsg = 'Vous n\'avez pas choisi le quantité';
-            } else {
-                if ($plantePanier == null) {
-                    $aData = array(
-                        'title_PlantePanier' => $plante->title_Plante,
-                        'image_PlantePanier' => $plante->image_Plante,
-                        'idUtilisateur' => $getUserID->idUtilisateur,
-                        'idPlante' => $this->_iId,
-                        'qnty_plantePanier' => $_POST['qnty_plantePanier'],
-                        'qnty_planteStock' => $plante->qnty_Plante,
-                        'prixPourQnty_plante' => ($plante->prix_Plante * $_POST['qnty_plantePanier'])
-                    );
+        /////__Si on est utilisateur ou admin, on peut d'interagir avec bdd__/////
+        if (!empty($_SESSION['is_user'])) {
+
+            //$getUserID = $this->oModel->getUserID(current($_SESSION));
+            $plantePanier = $this->oModel->getSpecificPlantePanierByUserID($this->getUserID->idUtilisateur, $this->_iId);
+            $this->oUtil->oPlantePanier = $this->oModel->getSpecificPlantePanierByUserID($this->getUserID->idUtilisateur, $this->_iId);
+
+            //__Ajouter une plante dans le panier/modifier quantité d'une plante dans la panier__//
+            if (isset($_POST['submit_ajouter'])) {
+                if ($_POST['qnty_plantePanier'] == 0) {
+                    $this->oUtil->sErrMsg = 'Vous n\'avez pas choisi le quantité';
+                } else {
+                    if ($plantePanier == null) {
+                        $aData = array(
+                            'idUtilisateur' => $this->getUserID->idUtilisateur,
+                            'idPlante' => $this->_iId,
+                            'title_PlantePanier' => $plante->title_Plante,
+                            'image_PlantePanier' => $plante->image_Plante,
+                            'qnty_plantePanier' => $_POST['qnty_plantePanier'],
+                            'qnty_planteStock' => $plante->qnty_Plante,
+                            'prixPourQnty_plante' => ($plante->prix_Plante * $_POST['qnty_plantePanier'])
+                        );
+                        $this->oModel->addPanierPlante($aData);
+                    } else {
+                        $aData = array(
+                            'idUtilisateur' => $this->getUserID->idUtilisateur,
+                            'idPlante' => $this->_iId,
+                            'qnty_Plante' => $_POST['qnty_plantePanier'],
+                            'prixPourQnty_plante' => ($plante->prix_Plante * $_POST['qnty_plantePanier'])
+                        );
+                        $this->oModel->changePanierPlante($aData);
+                    }
+                }
+?>
+                <script>
+                    window.location.replace('shop_plante_<?= $_GET['id'] ?>.html');
+                </script>
+            <?php
+                $this->oUtil->sSuccMsg = 'La plante a été ajouté dans le panier !';
+            }
+
+            if (isset($_POST['submit_effacer'])) {
+                $aData = array(
+                    'idUtilisateur' => $this->getUserID->idUtilisateur,
+                    'idPlante' => $this->_iId
+                );
+                $this->oModel->deletePanierPlante($aData);
+            ?>
+                <script>
+                    window.location.replace('shop_plante_<?= $_GET['id'] ?>.html');
+                </script>
+                <?php
+            }
+
+            //__Ajouter/editer une commentaire__//
+            if (isset($_POST['submit_comment'])) {
+                if (empty($_POST['body_Comment'] || $_POST['title_Comment'])) {
+                    $this->oUtil->sErrMsg = 'Vous n\'avez pas écrit de commentaire';
                 } else {
                     $aData = array(
-                        'idUtilisateur' => $getUserID->idUtilisateur,
-                        'idPlante' => $this->_iId,
-                        'qnty_Plante' => $_POST['qnty_plantePanier'],
-                        'prixPourQnty_plante' => ($plante->prix_Plante * $_POST['qnty_plantePanier'])
+                        'title_Comment' => htmlspecialchars($_POST['title_Comment']),
+                        'body_Comment' => htmlspecialchars($_POST['body_Comment']),
+                        'idUtilisateur' => $this->getUserID->idUtilisateur,
+                        'idPlante' => $_GET['id']
                     );
+                    $this->oModel->addComment($aData);
+                ?>
+                    <script>
+                        window.location.replace('shop_plante_<?= $_GET['id'] ?>.html');
+                    </script>
+                <?php
+                    $this->oUtil->sSuccMsg = 'Le Commentaire a été posté !';
+                }
+            } else if (isset($_POST['edit_comment'])) {
+                if (empty($_POST['body_Comment'] || $_POST['title_Comment'])) {
+                    $this->oUtil->sErrMsg = 'Vous n\'avez rien modifié';
+                } else {
+                    $aData = array(
+                        'title_Comment' => htmlspecialchars($_POST['title_Comment']),
+                        'body_Comment' => htmlspecialchars($_POST['body_Comment']),
+                        'idUtilisateur' => $this->getUserID->idUtilisateur,
+                        'idPlante' => $_GET['id']
+                    );
+                    $this->oModel->editComment($aData);
+                ?>
+                    <script>
+                        window.location.replace('shop_plante_<?= $_GET['id'] ?>.html');
+                    </script>
+            <?php
+                    $this->oUtil->sSuccMsg = 'Le Commentaire a été modifié !';
                 }
             }
-            if ($plantePanier == null) {
-                $this->oModel->addPanierPlante($aData);
-            } else {
-                $this->oModel->changePanierPlante($aData);
-            }
-?>
-            <script>
-                window.location.replace('shop_plante_<?= $_GET['id'] ?>.html');
-            </script>
-            <?php
-            $this->oUtil->sSuccMsg = 'La plante a été ajouté dans le panier !';
         }
 
-        //__Ajouter/editer une commentaire__//
-        if (isset($_POST['submit_comment'])) {
-            if (empty($_POST['body_Comment'] || $_POST['title_Comment'])) {
-                $this->oUtil->sErrMsg = 'Vous n\'avez pas écrit de commentaire';
-            } else {
-                $aData = array(
-                    'title_Comment' => htmlspecialchars($_POST['title_Comment']),
-                    'body_Comment' => htmlspecialchars($_POST['body_Comment']),
-                    'idUtilisateur' => $getUserID->idUtilisateur,
-                    'idPlante' => $_GET['id']
-                );
-                $this->oModel->addComment($aData);
-            ?>
-                <script>
-                    window.location.replace('shop_plante_<?= $_GET['id'] ?>.html');
-                </script>
-            <?php
-                $this->oUtil->sSuccMsg = 'Le Commentaire a été posté !';
-            }
-        } else if (isset($_POST['edit_comment'])) {
-            if (empty($_POST['body_Comment'] || $_POST['title_Comment'])) {
-                $this->oUtil->sErrMsg = 'Vous n\'avez rien modifié';
-            } else {
-                $aData = array(
-                    'title_Comment' => htmlspecialchars($_POST['title_Comment']),
-                    'body_Comment' => htmlspecialchars($_POST['body_Comment']),
-                    'idUtilisateur' => $getUserID->idUtilisateur,
-                    'idPlante' => $_GET['id']
-                );
-                $this->oModel->editComment($aData);
-            ?>
-                <script>
-                    window.location.replace('shop_plante_<?= $_GET['id'] ?>.html');
-                </script>
-            <?php
-                $this->oUtil->sSuccMsg = 'Le Commentaire a été modifié !';
-            }
-        }
+
+
+
+
         $this->oUtil->getView('plante');
     }
 
     public function panier()
     {
-        $getUserID = $this->oModel->getUserID(current($_SESSION));
-        $oPlantesPanier = $this->oModel->getAllPlantesPanierByUserID($getUserID->idUtilisateur);
-        $oTotalPrixPanier = $this->oModel->getTotalSumPanier($getUserID->idUtilisateur);
-        $this->oUtil->oPlantesPanier = $this->oModel->getAllPlantesPanierByUserID($getUserID->idUtilisateur);
-        $this->oUtil->oTotalPrixPanier = $this->oModel->getTotalSumPanier($getUserID->idUtilisateur);
+        //$getUserID = $this->oModel->getUserID(current($_SESSION));
+        $oPlantesPanier = $this->oModel->getAllPlantesPanierByUserID($this->getUserID->idUtilisateur);
+        $oTotalPrixPanier = $this->oModel->getTotalSumPanier($this->getUserID->idUtilisateur);
+        $this->oUtil->oPlantesPanier = $this->oModel->getAllPlantesPanierByUserID($this->getUserID->idUtilisateur);
+        $this->oUtil->oTotalPrixPanier = $this->oModel->getTotalSumPanier($this->getUserID->idUtilisateur);
         $this->oUtil->getView('panier');
 
         if (isset($_POST['submit_viderPanier'])) {
-            $this->oModel->deleteAllPanierPlantes($getUserID->idUtilisateur);
+            $this->oModel->deleteAllPanierPlantes($this->getUserID->idUtilisateur);
             ?>
             <script>
                 window.location.replace('shop_panier.html');
@@ -175,12 +203,12 @@ class Shop
                 );
                 $this->oModel->updateQntyPlante($aData);
             }
-            $this->oModel->deleteAllPanierPlantes($getUserID->idUtilisateur);
+            $this->oModel->deleteAllPanierPlantes($this->getUserID->idUtilisateur);
             $aData = array(
-                'numero_Facture' => $getUserID->idUtilisateur . $oTotalPrixPanier,
+                'numero_Facture' => $this->getUserID->idUtilisateur . $oTotalPrixPanier,
                 'montantPanier_Facture' => $oTotalPrixPanier,
-                'document_Facture' => $getUserID->idUtilisateur . $oTotalPrixPanier,
-                'idUtilisateur' => $getUserID->idUtilisateur
+                'document_Facture' => $this->getUserID->idUtilisateur . $oTotalPrixPanier,
+                'idUtilisateur' => $this->getUserID->idUtilisateur
             );
             $this->oModel->createFacture($aData);
         ?>
@@ -193,8 +221,8 @@ class Shop
 
     public function supprimerPlantePanier()
     {
-        $getUserID = $this->oModel->getUserID(current($_SESSION));
-        $this->oUtil->oPlantesPanier = $this->oModel->getAllPlantesPanierByUserID($getUserID->idUtilisateur);
+        //$getUserID = $this->oModel->getUserID(current($_SESSION));
+        $this->oUtil->oPlantesPanier = $this->oModel->getAllPlantesPanierByUserID($this->getUserID->idUtilisateur);
 
         $this->oUtil->getView('panier');
     }

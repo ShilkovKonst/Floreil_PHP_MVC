@@ -22,7 +22,7 @@
     				</div>
             <div class="card-content">
               <span class="card-title activator grey-text text-darken-4"><i class="material-icons right">more_vert</i></span>
-              <p><a href="<?=ROOT_URL?>shop_categorie_<?=$oCategorie->idCategorie?>.html">Voir le produit au complet</a></p>
+              <p><a href="<?=ROOT_URL?>shop_plantesCat_<?=$oCategorie->idCategorie?>.html">Voir le produit au complet</a></p>
             </div>
             <div class="card-reveal">
     					<span class="card-title grey-text text-darken-4"><?= $oCategorie->nom_Categorie ?><i class="material-icons right">close</i></span>

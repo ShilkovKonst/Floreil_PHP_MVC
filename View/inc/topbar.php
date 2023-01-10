@@ -11,7 +11,7 @@
 
 					<li class="<?php echo ($_GET['a'] == "index") ? "active" : ""; ?>"><a href="<?= ROOT_URL ?>shop_index.html">Accueil</a></li>
 					<?php if (!empty($_SESSION['is_user'])) : ?>
-						<li class="<?php echo ($_GET['a'] == "panier") ? "active" : ""; ?>"><a href="<?= ROOT_URL ?>shop_panier.html">Panier</a></li>
+						<li class="<?php echo ($_GET['a']=="panier") ? "active" : ""; ?>"><a class="" href="<?= ROOT_URL ?>shop_panier.html">Panier</a></li>
 					<?php endif ?>
 
 					<?php if (empty($_SESSION['is_admin']) && empty($_SESSION['is_user'])) : ?>

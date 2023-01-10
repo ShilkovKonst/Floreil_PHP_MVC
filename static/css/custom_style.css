@@ -1,0 +1,14 @@
+.cart-indicator {
+    position: relative;
+  }
+
+.cart-indicator::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    right: 5px;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+  }

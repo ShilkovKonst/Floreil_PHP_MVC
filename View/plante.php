@@ -28,6 +28,7 @@
                         <p><strong>Quantité: </strong><?= nl2br($this->oPlante->qnty_Plante) ?></p>
                     </div>
                 </article>
+                <?php if(empty($_SESSION['is_admin']) && !empty($_SESSION['is_user'])) : ?>
                 <form method="post">
                     <div class="row">
                         <div class="input-field col m4 s12">
@@ -40,11 +41,13 @@
                     <button type="submit" name="submit_ajouter" class="btn light-blue waves-effect waves-light">
                         Ajouter au panier
                     </button>
+                    <?php if($this->oPlantePanier != null) : ?>
                     <button type="submit" name="submit_effacer" class="btn red waves-effect waves-light">
                         Effacer du panier
                     </button>
+                    <?php endif ?>
                 </form>
-
+                <?php endif ?>
                 <hr>
                 <p><em>Posté le <?= date('d/m/Y à H:i', strtotime($this->oPlante->createdDate_Plante)); ?></em></p>
                 <br>
@@ -52,7 +55,7 @@
 
         <!-- Formulaire -->
         <?php if (empty($_SESSION['is_user']) && empty($_SESSION['is_admin'])) : ?>
-            <a href="<?= ROOT_URL ?>?p=shop&amp;a=login"><button class="btn waves-effect waves-light">Se connecter pour commenter</button></a>
+            <a href="<?= ROOT_URL ?>?p=shop&amp;a=login"><button class="btn waves-effect waves-light">Se connecter pour commenter ou acheter des plantes</button></a>
             <br><br>
 
         <?php else : ?>

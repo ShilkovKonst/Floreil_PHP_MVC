@@ -214,8 +214,7 @@ class Shop
     $oStmt->bindParam(':qnty_plantePanier', $aData['qnty_plantePanier'], \PDO::PARAM_INT);
     $oStmt->bindParam(':qnty_planteStock', $aData['qnty_planteStock'], \PDO::PARAM_INT);
     $oStmt->bindParam(':prixPourQnty_plante', $aData['prixPourQnty_plante'], \PDO::PARAM_INT);
-    $oStmt->execute();
-    return $oStmt->fetchAll(\PDO::FETCH_OBJ);
+    return $oStmt->execute();
   }
 
   public function createFacture(array $aData)
@@ -229,8 +228,7 @@ class Shop
     $oStmt->bindParam(':montantPanier_Facture', $aData['montantPanier_Facture'], \PDO::PARAM_STR);
     $oStmt->bindParam(':document_Facture', $aData['document_Facture'], \PDO::PARAM_STR);
     $oStmt->bindParam(':idUtilisateur', $aData['idUtilisateur'], \PDO::PARAM_INT);
-    $oStmt->execute();
-    return $oStmt->fetchAll(\PDO::FETCH_OBJ);
+    return $oStmt->execute();
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -286,8 +284,7 @@ class Shop
     $oStmt->bindParam(':idPlante', $aData['idPlante'], \PDO::PARAM_INT);
     $oStmt->bindParam(':qnty_plantePanier', $aData['qnty_plantePanier'], \PDO::PARAM_INT);
     $oStmt->bindParam(':prixPourQnty_plante', $aData['prixPourQnty_plante'], \PDO::PARAM_INT);
-    $oStmt->execute();
-    return $oStmt->fetchAll(\PDO::FETCH_OBJ);
+    return $oStmt->execute();
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
