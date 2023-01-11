@@ -9,11 +9,14 @@ class Admin extends Shop
     // Récupère les données de tous les plantes puis affiche la page edit.php
     public function edit()
     {
+
+
         if (!$this->isLogged())
             header('Location: shop_index.html');
 
         $this->oUtil->oPlantes = $this->oModel->getAllPlantes();
         $this->oUtil->getView('edit');
+
     }
 
     // Affiche la page d'edition d'article
@@ -31,8 +34,8 @@ class Admin extends Shop
                 || empty($_POST['prix_Plante']) || empty($_POST['qnty_Plante'])
                 || empty($_POST['nomCommun_Plante']) || empty($_POST['hauteurCM_Plante'])
                 || empty($_POST['feuillage_Plante']) || empty($_POST['arrosage_Plante'])
-                || empty($_POST['floraison_Plante']) || empty($_POST['modeVie_Plante']) 
-                || empty($_POST['resistanceFroid_Plante']) || empty($_POST['resistanceFroidBas_Plante']) 
+                || empty($_POST['floraison_Plante']) || empty($_POST['modeVie_Plante'])
+                || empty($_POST['resistanceFroid_Plante']) || empty($_POST['resistanceFroidBas_Plante'])
                 || empty($_POST['idCategorie']) || empty($_POST['idCategorie'])
             ) {
                 $this->oUtil->sErrMsg = 'Tous les champs doivent être remplis.';
@@ -41,21 +44,21 @@ class Admin extends Shop
                 $this->oModel = new \Floreil_PHP_MVC\Model\Admin;
 
                 $aData = array(
-                    'idPlante'                      => $_GET['id'],
-                    'title_Plante'                  => $_POST['title_Plante'],
-                    'description_Plante'            => $_POST['description_Plante'],
-                    'prix_Plante'                   => $_POST['prix_Plante'],
-                    'qnty_Plante'                   => $_POST['qnty_Plante'],
-                    'nomCommun_Plante'              => $_POST['nomCommun_Plante'],
-                    'hauteurCM_Plante'              => $_POST['hauteurCM_Plante'],
-                    'feuillage_Plante'              => $_POST['feuillage_Plante'],
-                    'arrosage_Plante'               => $_POST['arrosage_Plante'],
-                    'floraison_Plante'              => $_POST['floraison_Plante'],
-                    'modeVie_Plante'                => $_POST['modeVie_Plante'],
-                    'resistanceFroid_Plante'        => $_POST['resistanceFroid_Plante'],
-                    'resistanceFroidBas_Plante'     => $_POST['resistanceFroidBas_Plante'],
-                    'resistanceFroidHaut_Plante'    => $_POST['resistanceFroidHaut_Plante'],
-                    'idCategorie'                   => $_POST['idCategorie'],
+                    'idPlante' => $_GET['id'],
+                    'title_Plante' => $_POST['title_Plante'],
+                    'description_Plante' => $_POST['description_Plante'],
+                    'prix_Plante' => $_POST['prix_Plante'],
+                    'qnty_Plante' => $_POST['qnty_Plante'],
+                    'nomCommun_Plante' => $_POST['nomCommun_Plante'],
+                    'hauteurCM_Plante' => $_POST['hauteurCM_Plante'],
+                    'feuillage_Plante' => $_POST['feuillage_Plante'],
+                    'arrosage_Plante' => $_POST['arrosage_Plante'],
+                    'floraison_Plante' => $_POST['floraison_Plante'],
+                    'modeVie_Plante' => $_POST['modeVie_Plante'],
+                    'resistanceFroid_Plante' => $_POST['resistanceFroid_Plante'],
+                    'resistanceFroidBas_Plante' => $_POST['resistanceFroidBas_Plante'],
+                    'resistanceFroidHaut_Plante' => $_POST['resistanceFroidHaut_Plante'],
+                    'idCategorie' => $_POST['idCategorie'],
                 );
                 $this->oModel->updatePlante($aData);
 
@@ -96,8 +99,8 @@ class Admin extends Shop
                 || empty($_POST['prix_Plante']) || empty($_POST['qnty_Plante'])
                 || empty($_POST['nomCommun_Plante']) || empty($_POST['hauteurCM_Plante'])
                 || empty($_POST['feuillage_Plante']) || empty($_POST['arrosage_Plante'])
-                || empty($_POST['floraison_Plante']) || empty($_POST['modeVie_Plante']) 
-                || empty($_POST['resistanceFroid_Plante']) || empty($_POST['resistanceFroidBas_Plante']) 
+                || empty($_POST['floraison_Plante']) || empty($_POST['modeVie_Plante'])
+                || empty($_POST['resistanceFroid_Plante']) || empty($_POST['resistanceFroidBas_Plante'])
                 || empty($_POST['resistanceFroidHaut_Plante']) || empty($_POST['idCategorie'])
             ) {
                 $this->oUtil->sErrMsg = 'Tous les champs doivent être remplis.';
@@ -106,25 +109,24 @@ class Admin extends Shop
                 $this->oModel = new \Floreil_PHP_MVC\Model\Admin;
 
                 $aData = array(
-                    'idCategorie'                   => $_POST['idCategorie'],
-                    'title_Plante'                  => $_POST['title_Plante'],
-                    'description_Plante'            => $_POST['description_Plante'],
-                    'prix_Plante'                   => $_POST['prix_Plante'],
-                    'qnty_Plante'                   => $_POST['qnty_Plante'],
-                    'nomCommun_Plante'              => $_POST['nomCommun_Plante'],
-                    'hauteurCM_Plante'              => $_POST['hauteurCM_Plante'],
-                    'feuillage_Plante'              => $_POST['feuillage_Plante'],
-                    'arrosage_Plante'               => $_POST['arrosage_Plante'],
-                    'floraison_Plante'              => $_POST['floraison_Plante'],
-                    'modeVie_Plante'                => $_POST['modeVie_Plante'],
-                    'resistanceFroid_Plante'        => $_POST['resistanceFroid_Plante'],
-                    'resistanceFroidBas_Plante'     => $_POST['resistanceFroidBas_Plante'],
-                    'resistanceFroidHaut_Plante'    => $_POST['resistanceFroidHaut_Plante']
+                    'idCategorie' => $_POST['idCategorie'],
+                    'title_Plante' => $_POST['title_Plante'],
+                    'description_Plante' => $_POST['description_Plante'],
+                    'prix_Plante' => $_POST['prix_Plante'],
+                    'qnty_Plante' => $_POST['qnty_Plante'],
+                    'nomCommun_Plante' => $_POST['nomCommun_Plante'],
+                    'hauteurCM_Plante' => $_POST['hauteurCM_Plante'],
+                    'feuillage_Plante' => $_POST['feuillage_Plante'],
+                    'arrosage_Plante' => $_POST['arrosage_Plante'],
+                    'floraison_Plante' => $_POST['floraison_Plante'],
+                    'modeVie_Plante' => $_POST['modeVie_Plante'],
+                    'resistanceFroid_Plante' => $_POST['resistanceFroid_Plante'],
+                    'resistanceFroidBas_Plante' => $_POST['resistanceFroidBas_Plante'],
+                    'resistanceFroidHaut_Plante' => $_POST['resistanceFroidHaut_Plante']
                 );
                 $this->oModel->addPlante($aData);
 
-                if (!empty($_FILES['image']['name'])) 
-                {
+                if (!empty($_FILES['image']['name'])) {
                     $file = $_FILES['image']['name'];
                     $extensions = ['.png', '.jpg', '.jpeg', '.gif', '.PNG', '.JPG', '.JPEG', '.GIF'];
                     $extension = strrchr($file, '.');
@@ -146,44 +148,43 @@ class Admin extends Shop
     // On obtient les commentaires non-signalés, les commentaires signalés et le nombre de signalements
     public function dashboard()
     {
-      if (!$this->isLogged())
-      header('Location: shop_index.html');
+        if (!$this->isLogged())
+            header('Location: shop_index.html');
 
-      $this->oUtil->getModel('Admin');
-      $this->oModel = new \Floreil_PHP_MVC\Model\Admin;
+        $this->oUtil->getModel('Admin');
+        $this->oModel = new \Floreil_PHP_MVC\Model\Admin;
 
-      $tables = [
-      	'Plantes' 	      	 => 'Plantes',
-      	'Commentaires'  	 => 'poster_comment',
-      	'Utilisateurs' 	     => 'Utilisateurs'
-      ];
+        $tables = [
+            'Plantes' => 'Plantes',
+            'Commentaires' => 'poster_comment',
+            'Utilisateurs' => 'Utilisateurs'
+        ];
 
-      $colors = [
-      	'Plantes'			 => 'green',
-      	'poster_comment' 	 => 'brown',
-      	'Utilisateurs'		 => 'blue'
-      ];
+        $colors = [
+            'Plantes' => 'green',
+            'poster_comment' => 'brown',
+            'Utilisateurs' => 'blue'
+        ];
 
-      $ids = [
-        'Plantes'			 => 'idPlante',
-      	'poster_comment' 	 => 'idUtilisateur',
-      	'Utilisateurs'		 => 'idUtilisateur'
-      ];
+        $ids = [
+            'Plantes' => 'idPlante',
+            'poster_comment' => 'idUtilisateur',
+            'Utilisateurs' => 'idUtilisateur'
+        ];
 
-      $this->oUtil->aColors = array();
-      $this->oUtil->aInTable = array();
-      $this->oUtil->aTableName = array();
+        $this->oUtil->aColors = array();
+        $this->oUtil->aInTable = array();
+        $this->oUtil->aTableName = array();
 
-      foreach ($tables as $table_name => $table)
-      {
-        $this->oUtil->aColors[] = $this->getColor($table,$colors);
-        $this->oUtil->aInTable[] = $this->oModel->inTable($table, $ids[$table]);
-        $this->oUtil->aTableName[] = $table_name;
-      }
+        foreach ($tables as $table_name => $table) {
+            $this->oUtil->aColors[] = $this->getColor($table, $colors);
+            $this->oUtil->aInTable[] = $this->oModel->inTable($table, $ids[$table]);
+            $this->oUtil->aTableName[] = $table_name;
+        }
 
-      $this->oUtil->length = count($this->oUtil->aTableName);
+        $this->oUtil->length = count($this->oUtil->aTableName);
 
-      $this->oUtil->getView('dashboard');
+        $this->oUtil->getView('dashboard');
     }
 
     /* ================ ACTIONS SANS VUS ================ */
@@ -191,42 +192,43 @@ class Admin extends Shop
     // On supprime le plante ainsi que les commentaires associés à ce plante de ces commentaires
     public function delete()
     {
-      if (!$this->isLogged())
-      header('Location: blog_index.html');
+        if (!$this->isLogged())
+            header('Location: blog_index.html');
 
-      $this->oUtil->getModel('Admin');
-      $this->oModel = new \Floreil_PHP_MVC\Model\Admin;
+        $this->oUtil->getModel('Admin');
+        $this->oModel = new \Floreil_PHP_MVC\Model\Admin;
 
-      $this->oModel->deleteCommentsFromPlante($_GET['id']); // supprime les commentaires du plante
-      $this->oModel->deletePlante($_GET['id']); // supprime le plante
+        $this->oModel->deletePanierPlanteByAdmin($_GET['id']);         // supprime la plante du panier
+        $this->oModel->deleteCommentsFromPlante($_GET['id']);   // supprime les commentaires du plante
+        $this->oModel->deletePlante($_GET['id']);               // supprime la plante
 
-      header('Location: admin_edit.html');
+        header('Location: admin_edit.html');
     }
 
     //On supprime le commentaire ainsi que les signalements associés
     public function deleteComment()
     {
-      if (!$this->isLogged())
-      header('Location: blog_index.html');
+        if (!$this->isLogged())
+            header('Location: blog_index.html');
 
-      $oPlante = $this->oUtil->oPlante = $this->oModel->getPlanteById($_GET['id']); // Récupère les données du plante
-      $this->oUtil->getModel('Admin');
-      $this->oModel = new \Floreil_PHP_MVC\Model\Admin;
+        $oPlante = $this->oUtil->oPlante = $this->oModel->getPlanteById($_GET['id']); // Récupère les données du plante
+        $this->oUtil->getModel('Admin');
+        $this->oModel = new \Floreil_PHP_MVC\Model\Admin;
 
-      $iIdPlante = $_GET['id'];
-      $iIdUser = $_GET['idsup'];
-      $this->oModel->deleteComment($iIdUser, $iIdPlante); // supprime le commentaire
+        $iIdPlante = $_GET['id'];
+        $iIdUser = $_GET['idsup'];
+        $this->oModel->deleteComment($iIdUser, $iIdPlante); // supprime le commentaire
 
-      header("Location: shop_plante_$oPlante->idPlante.html");
+        header("Location: shop_plante_$oPlante->idPlante.html");
     }
 
     // On obtient la couleur associé à chaque table
-    private function getColor($aTable,$sColors)
+    private function getColor($aTable, $sColors)
     {
-      if(isset($sColors[$aTable])){
-  			return $sColors[$aTable];
-  		}else {
-  			return "orange";
-  		}
+        if (isset($sColors[$aTable])) {
+            return $sColors[$aTable];
+        } else {
+            return "orange";
+        }
     }
 }

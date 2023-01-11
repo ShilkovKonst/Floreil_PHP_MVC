@@ -42,7 +42,7 @@
             </div>
             <div class="input-field col m6 s12">
               <input type="text" name="telMob_Utilisateur" id="telMob_Utilisateur">
-              <label for="telMob_Utilisateur">Telephone mobile</label>
+              <label for="telMob_Utilisateur">Téléphone mobile</label>
             </div>
             <div class="input-field col m6 s12">
               <input type="text" name="paysAdresse_Utilisateur" id="paysAdresse_Utilisateur">
@@ -81,8 +81,9 @@
 
 </div>
 <center>
-  <a href="<?= ROOT_URL ?>blog_login.html">Déjà inscrit ?</a>
+  <a href="<?= ROOT_URL ?>shop_login.html">Déjà inscrit ?</a>
 </center>
 </div>
 </div>
 </div>
+<?php require 'inc/footer.php' ?>

@@ -170,10 +170,6 @@ class Shop
             }
         }
 
-
-
-
-
         $this->oUtil->getView('plante');
     }
 
@@ -184,6 +180,7 @@ class Shop
         $oTotalPrixPanier = $this->oModel->getTotalSumPanier($this->getUserID->idUtilisateur);
         $this->oUtil->oPlantesPanier = $this->oModel->getAllPlantesPanierByUserID($this->getUserID->idUtilisateur);
         $this->oUtil->oTotalPrixPanier = $this->oModel->getTotalSumPanier($this->getUserID->idUtilisateur);
+
         $this->oUtil->getView('panier');
 
         if (isset($_POST['submit_viderPanier'])) {
@@ -257,6 +254,48 @@ class Shop
         $this->oUtil->getView('login');
     }
 
+    public function user()
+    {
+        $this->oUtil->oUser = $this->oModel->getUserByUsername(current($_SESSION));
+
+        $this->oUtil->getView('user');
+
+        if (isset($_POST['submit_modification'])) {
+            if (
+                empty($_POST['telMob_Utilisateur']) || empty($_POST['batimentAdresse_Utilisateur'])
+                || empty($_POST['rueAdresse_Utilisateur']) || empty($_POST['codePostaleAdresse_Utilisateur'])
+                || empty($_POST['villeAdresse_Utilisateur']) || empty($_POST['paysAdresse_Utilisateur'])
+            ) {
+                $this->oUtil->sErrMsg = 'Tous les champs doivent être remplis.';
+            } else {
+                $sTelMob = htmlspecialchars(trim($_POST['telMob_Utilisateur']));
+                $sHouseAdresse = htmlspecialchars(trim($_POST['batimentAdresse_Utilisateur']));
+                $sStreetAdresse = htmlspecialchars(trim($_POST['rueAdresse_Utilisateur']));
+                $sZIPAdresse = htmlspecialchars(trim($_POST['codePostaleAdresse_Utilisateur']));
+                $sCityAdresse = htmlspecialchars(trim($_POST['villeAdresse_Utilisateur']));
+                $sCountryAdresse = htmlspecialchars(trim($_POST['paysAdresse_Utilisateur']));
+                $sIdUtilisateur = $this->getUserID->idUtilisateur;
+
+                $aData = array(
+                    'telMob_Utilisateur' => $sTelMob,
+                    'batimentAdresse_Utilisateur' => $sHouseAdresse,
+                    'rueAdresse_Utilisateur' => $sStreetAdresse,
+                    'codePostaleAdresse_Utilisateur' => $sZIPAdresse,
+                    'villeAdresse_Utilisateur' => $sCityAdresse,
+                    'paysAdresse_Utilisateur' => $sCountryAdresse,
+                    'idUtilisateur' => $sIdUtilisateur
+                );
+                $this->oModel->changeAdresseUser($aData);
+                ?>
+                <script>
+                                window.location.replace('shop_user.html');
+                </script>
+                <?php
+                $this->oUtil->sSuccMsg = 'L\'information a été modifié !';
+            }
+        }
+    }
+
     public function registration()
     {
         if ($this->isLogged())
@@ -291,7 +330,8 @@ class Shop
                     'email_Utilisateur' => $sEmail,
                     'telMob_Utilisateur' => $sTelMob,
                     'username_Utilisateur' => $sUsername,
-                    'password_Utilisateur' => sha1($sPassword),          //encryption de mdp
+                    'password_Utilisateur' => sha1($sPassword),
+                    //encryption de mdp
                     'batimentAdresse_Utilisateur' => $sHouseAdresse,
                     'rueAdresse_Utilisateur' => $sStreetAdresse,
                     'codePostaleAdresse_Utilisateur' => $sZIPAdresse,
@@ -302,7 +342,7 @@ class Shop
                 ?>
 
                 <script>
-                    window.location.replace('shop_login.html');
+                                                   window.location.replace('shop_login.html');
                 </script>
 
                 <?php

@@ -92,6 +92,13 @@ class Admin extends Shop
         $oStmt->bindParam(':idPlante', $iId, \PDO::PARAM_INT);
         return $oStmt->execute();
     }
+    
+    public function deletePanierPlanteByAdmin($idPlante)
+    {
+      $oStmt = $this->oDb->prepare('DELETE FROM ajouter_au_panier WHERE idPlante = :idPlante LIMIT 1');
+      $oStmt->bindParam(':idPlante', $idPlante, \PDO::PARAM_INT);
+      return $oStmt->execute();
+    }
 
     public function deleteComment($iIdUser, $iIdPlante)
     {

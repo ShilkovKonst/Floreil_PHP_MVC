@@ -132,6 +132,14 @@ class Shop
     return $oStmt->fetch(\PDO::FETCH_OBJ);
   }
 
+  public function getUserByUsername($username)
+  {
+    $oStmt = $this->oDb->prepare('SELECT * FROM Utilisateurs WHERE username_Utilisateur = :username LIMIT 1');
+    $oStmt->bindParam(':username', $username, \PDO::PARAM_STR);
+    $oStmt->execute();
+    return $oStmt->fetch(\PDO::FETCH_OBJ);
+  }
+
   //remade Patrick's method according to my Comments table
   public function getComments()
   {
@@ -296,6 +304,30 @@ class Shop
     $oStmt->bindParam(':qnty_plantePanier', $aData['qnty_plantePanier'], \PDO::PARAM_INT);
     $oStmt->bindParam(':prixPourQnty_plante', $aData['prixPourQnty_plante'], \PDO::PARAM_INT);
     return $oStmt->execute();
+  }
+
+  public function changeAdresseUser($aData){
+    $oStmt = $this->oDb->prepare('
+    UPDATE 
+        Utilisateurs 
+    SET
+        telMob_Utilisateur = :telMob_Utilisateur,
+        batimentAdresse_Utilisateur = :batimentAdresse_Utilisateur,
+        rueAdresse_Utilisateur = :rueAdresse_Utilisateur,
+        codePostaleAdresse_Utilisateur = :codePostaleAdresse_Utilisateur,
+        villeAdresse_Utilisateur = :villeAdresse_Utilisateur,
+        paysAdresse_Utilisateur = :paysAdresse_Utilisateur
+    WHERE
+        idUtilisateur = :idUtilisateur
+    ');
+    $oStmt->bindParam(':idUtilisateur', $aData['idUtilisateur'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':telMob_Utilisateur', $aData['telMob_Utilisateur'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':batimentAdresse_Utilisateur', $aData['batimentAdresse_Utilisateur'], \PDO::PARAM_STR);
+    $oStmt->bindParam(':rueAdresse_Utilisateur', $aData['rueAdresse_Utilisateur'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':codePostaleAdresse_Utilisateur', $aData['codePostaleAdresse_Utilisateur'], \PDO::PARAM_INT);
+    $oStmt->bindParam(':villeAdresse_Utilisateur', $aData['villeAdresse_Utilisateur'], \PDO::PARAM_STR);
+    $oStmt->bindParam(':paysAdresse_Utilisateur', $aData['paysAdresse_Utilisateur'], \PDO::PARAM_STR);
+    return $oStmt->execute($aData);
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
